@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": ".build"
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", ".build"]
+}
