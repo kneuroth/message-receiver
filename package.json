@@ -5,7 +5,7 @@
   "dependencies": {
     "@types/aws-lambda": "^8.10.150",
     "aws-sdk": "^2.1692.0",
-    "serverless-http": "^3.2.0",
+    "date-fns": "^4.1.0",
     "zod": "^3.25.64"
   },
   "devDependencies": {
