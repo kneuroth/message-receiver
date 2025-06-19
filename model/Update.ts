@@ -10,12 +10,11 @@ export type From = z.infer<typeof From>
 
 export const Chat = z.object({
     id: z.number(),
-    title: z.string(),
-    type: z.literal('group')
+    type: z.literal('group').or(z.literal('private'))
 })
 
 export type Chat = z.infer<typeof Chat>
-
+    
 export const Message = z.object({
     message_id: z.number(),
     from: From,
