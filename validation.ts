@@ -9,14 +9,16 @@ function matchTextFormat(text: string): RegExpMatchArray | null {
 }
 
 function isCorrectWordleNumber(wordleNumber: number): boolean {
+
     const referenceDate = new Date("2025-06-19"); // Wordle #1461
     const referenceNumber = 1461;
+
     const today = startOfDay(new Date());
-    const days = differenceInCalendarDays(referenceDate, today);
+    const days = differenceInCalendarDays(today, referenceDate);
     const expectedNumber = referenceNumber + days;
 
-    console.log(wordleNumber)
-    console.log(expectedNumber)
+    console.log("Todays wordle number i think:", expectedNumber)
+    console.log("and this one is", wordleNumber)
     
     return wordleNumber === expectedNumber;
 }
@@ -29,6 +31,9 @@ export function isValidScoreForToday(update: Update): ScoreValidationResult {
     }
 
     const match = matchTextFormat(update.message.text);
+
+    console.log(match)
+    
     if (!match) {
         return { valid: false, reason: 'Message text is not formatted correctly'}
     }
@@ -39,7 +44,9 @@ export function isValidScoreForToday(update: Update): ScoreValidationResult {
         return { valid: false, reason: 'This is not today\'s wordle number' };
     }
 
-    const score = Number(match[2]);
+    const score = isNaN(+match[2]) ? 7 : Number(match[2]);
+
+    console.log("Score:", score)
 
     return { valid: true, score: score };
 
