@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.0.1",
+    "prettier": "3.6.0",
     "serverless-plugin-typescript": "^2.1.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

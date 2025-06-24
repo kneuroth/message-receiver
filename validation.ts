@@ -1,53 +1,61 @@
-import { WORDLE_SCORE_MATCH_REGEX } from "./constants";
-import { Update } from "./model/Update";
-import { fromUnixTime, isSameDay, differenceInCalendarDays, startOfDay  } from "date-fns";
+import { WORDLE_SCORE_MATCH_REGEX } from './constants'
+import { Update } from './model/Update'
+import {
+  fromUnixTime,
+  isSameDay,
+  differenceInCalendarDays,
+  startOfDay,
+} from 'date-fns'
 
-export type ScoreValidationResult = { valid: true, score: number } | { valid: false; reason: string };
+export type ScoreValidationResult =
+  | { valid: true; score: number }
+  | { valid: false; reason: string }
 
 function matchTextFormat(text: string): RegExpMatchArray | null {
-    return text.match(WORDLE_SCORE_MATCH_REGEX);
+  return text.match(WORDLE_SCORE_MATCH_REGEX)
 }
 
 function isCorrectWordleNumber(wordleNumber: number): boolean {
+  const referenceDate = new Date('2025-06-19') // Wordle #1461
+  const referenceNumber = 1461
 
-    const referenceDate = new Date("2025-06-19"); // Wordle #1461
-    const referenceNumber = 1461;
+  const today = startOfDay(new Date())
+  const days = differenceInCalendarDays(today, referenceDate)
+  const expectedNumber = referenceNumber + days
 
-    const today = startOfDay(new Date());
-    const days = differenceInCalendarDays(today, referenceDate);
-    const expectedNumber = referenceNumber + days;
+  console.log('Todays wordle number i think:', expectedNumber)
+  console.log('and this one is', wordleNumber)
 
-    console.log("Todays wordle number i think:", expectedNumber)
-    console.log("and this one is", wordleNumber)
-    
-    return wordleNumber === expectedNumber;
+  return wordleNumber === expectedNumber
 }
 
 export function isValidScoreForToday(update: Update): ScoreValidationResult {
-    const updateDate: Date = fromUnixTime(update.message.date);
+  const updateDate: Date = fromUnixTime(update.message.date)
 
-    if (!isSameDay(updateDate, new Date())) {
-        return { valid: false, reason: 'This update is from the wrong date'}
+  if (!isSameDay(updateDate, new Date())) {
+    return { valid: false, reason: 'This update is from the wrong date' }
+  }
+
+  const match = matchTextFormat(update.message.text)
+
+  console.log(match)
+
+  if (!match) {
+    return {
+      valid: false,
+      reason: 'Message text is not formatted correctly',
     }
+  }
 
-    const match = matchTextFormat(update.message.text);
+  const wordleNumber = Number(match[1].replace(',', ''))
 
-    console.log(match)
-    
-    if (!match) {
-        return { valid: false, reason: 'Message text is not formatted correctly'}
-    }
+  if (!isCorrectWordleNumber(wordleNumber)) {
+    return { valid: false, reason: "This is not today's wordle number" }
+  }
 
-    const wordleNumber = Number(match[1].replace(',', ''));
+  const score = isNaN(+match[2]) ? 7 : Number(match[2])
 
-    if(!isCorrectWordleNumber(wordleNumber)) {
-        return { valid: false, reason: 'This is not today\'s wordle number' };
-    }
+  console.log('Score:', score)
 
-    const score = isNaN(+match[2]) ? 7 : Number(match[2]);
-
-    console.log("Score:", score)
-
-    return { valid: true, score: score };
-
+  return { valid: true, score: score }
 }

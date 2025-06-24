@@ -30,13 +30,14 @@ functions:
       - httpApi:
           path: /sendMessage
           method: post
-  
+
   getScores:
     handler: getScores.getScores
     events:
       - httpApi:
           path: /getScores
           method: get
+
 resources:
   Resources:
     ScoreTable:

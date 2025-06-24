@@ -1,2 +1,3 @@
-let num = '1,234'
-console.log(Number(num))
+function test() {
+  console.log('something')
+}
