@@ -19,6 +19,7 @@ provider:
             - 'dynamodb:Scan*'
             - 'dynamodb:UpdateItem'
             - 'dynamodb:DeleteItem'
+            - 'dynamodb:BatchWriteItem'
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-scoreTable-${sls:stage}
   environment:
     DYNAMODB_SCORE_TABLE: ${self:service}-scoreTable-${sls:stage}
@@ -32,11 +33,25 @@ functions:
           method: post
 
   getScores:
-    handler: getScores.getScores
+    handler: scores.getScores
     events:
       - httpApi:
           path: /getScores
           method: get
+
+  addScore:
+    handler: scores.addScore
+    events:
+      - httpApi:
+          path: /addScore
+          method: post
+
+  clearScores:
+    handler: scores.clearScores
+    events:
+      - httpApi:
+          path: /deleteScores
+          method: delete
 
 resources:
   Resources:

@@ -1,6 +1,6 @@
-import { Update } from './model/Update'
+import { updateSchema } from './model/Update'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { isValidScoreForToday } from './validation'
+import { isValidScoreForToday } from './util/validation'
 import { format, fromUnixTime } from 'date-fns'
 
 import {
@@ -8,8 +8,6 @@ import {
   PutItemCommand,
   PutItemCommandInput,
 } from '@aws-sdk/client-dynamodb'
-
-const AWS = require('aws-sdk')
 
 module.exports.receiveMessage = async (
   req: APIGatewayProxyEvent
@@ -22,7 +20,7 @@ module.exports.receiveMessage = async (
   }
 
   const body = JSON.parse(req.body)
-  const updateParse = Update.safeParse(body)
+  const updateParse = updateSchema.safeParse(body)
 
   if (!updateParse.success) {
     console.log('Invalid telegram Update:', req.body)

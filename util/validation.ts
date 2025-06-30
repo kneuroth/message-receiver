@@ -1,5 +1,5 @@
-import { WORDLE_SCORE_MATCH_REGEX } from './constants'
-import { Update } from './model/Update'
+import { WORDLE_SCORE_MATCH_REGEX } from '../constants'
+import { Update } from '../model/Update'
 import {
   fromUnixTime,
   isSameDay,
@@ -23,9 +23,6 @@ function isCorrectWordleNumber(wordleNumber: number): boolean {
   const days = differenceInCalendarDays(today, referenceDate)
   const expectedNumber = referenceNumber + days
 
-  console.log('Todays wordle number i think:', expectedNumber)
-  console.log('and this one is', wordleNumber)
-
   return wordleNumber === expectedNumber
 }
 
@@ -37,8 +34,6 @@ export function isValidScoreForToday(update: Update): ScoreValidationResult {
   }
 
   const match = matchTextFormat(update.message.text)
-
-  console.log(match)
 
   if (!match) {
     return {
@@ -54,8 +49,6 @@ export function isValidScoreForToday(update: Update): ScoreValidationResult {
   }
 
   const score = isNaN(+match[2]) ? 7 : Number(match[2])
-
-  console.log('Score:', score)
 
   return { valid: true, score: score }
 }

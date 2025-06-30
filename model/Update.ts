@@ -1,33 +1,29 @@
 import { z } from 'zod/v4'
 
-export const From = z.object({
+export const fromSchema = z.object({
   id: z.number(),
   first_name: z.string(),
   username: z.string(),
 })
+export type From = z.infer<typeof fromSchema>
 
-export type From = z.infer<typeof From>
-
-export const Chat = z.object({
+export const chatSchema = z.object({
   id: z.number(),
   type: z.literal('group').or(z.literal('private')),
 })
+export type Chat = z.infer<typeof chatSchema>
 
-export type Chat = z.infer<typeof Chat>
-
-export const Message = z.object({
+export const messageSchema = z.object({
   message_id: z.number(),
-  from: From,
-  chat: Chat,
+  from: fromSchema,
+  chat: chatSchema,
   date: z.number(),
   text: z.string(),
 })
+export type Message = z.infer<typeof messageSchema>
 
-export type Message = z.infer<typeof Message>
-
-export const Update = z.looseObject({
+export const updateSchema = z.looseObject({
   update_id: z.number(),
-  message: Message,
+  message: messageSchema,
 })
-
-export type Update = z.infer<typeof Update>
+export type Update = z.infer<typeof updateSchema>
