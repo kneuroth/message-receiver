@@ -23,6 +23,18 @@ provider:
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-scoreTable-${sls:stage}
   environment:
     DYNAMODB_SCORE_TABLE: ${self:service}-scoreTable-${sls:stage}
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedMethods:
+        - GET
+        - POST
+        - DELETE
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      maxAge: 86400
 
 functions:
   receiveMessage:
