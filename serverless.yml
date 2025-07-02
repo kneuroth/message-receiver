@@ -58,6 +58,13 @@ functions:
           path: /addScore
           method: post
 
+  deleteScore:
+    handler: scores.deleteScore
+    events:
+      - httpApi:
+          path: /deleteScore/{primary_key}
+          method: delete
+
   clearScores:
     handler: scores.clearScores
     events:

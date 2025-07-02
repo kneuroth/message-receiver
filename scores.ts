@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { BatchWriteItemCommand, DynamoDBClient, PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb'
+import { BatchWriteItemCommand, DeleteItemCommand, DeleteItemCommandInput, DynamoDBClient, PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb'
 import { insertScoreSchema } from './model/Score'
 
@@ -63,6 +63,10 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
   } catch (e) {
     // Handle database write errors
     console.error(e)
+    return {
+      statusCode: 500,
+      body: 'Error writing to database',
+    }
   } finally {
     console.log('Wrote successfully')
     return {
@@ -72,6 +76,39 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
   }
 }
 
+module.exports.deleteScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  if (!req.pathParameters || !req.pathParameters.primary_key) {
+    return {
+      statusCode: 400,
+      body: 'No primary key provided',
+    }
+  }
+  try {
+    const client = DynamoDBDocumentClient.from(new DynamoDBClient({}))
+    const pk = req.pathParameters.primary_key;
+    const input: DeleteItemCommandInput = {
+      TableName: process.env.DYNAMODB_SCORE_TABLE,
+      Key: {
+        primary_key: { S: pk },
+      },
+    }
+    const command = new DeleteItemCommand(input);
+    const response = await client.send(command)
+  } catch (e) {
+    console.error(e)
+    return {
+      statusCode: 500,
+      body: 'Error deleting score',
+    }
+  } finally {
+    console.log('Deleted successfully')
+    return {
+      statusCode: 200,
+      body: 'Deleted score'
+    }
+  }
+
+}
 
 module.exports.clearScores = async (): Promise<APIGatewayProxyResult> => {
   const client = DynamoDBDocumentClient.from(new DynamoDBClient({}))
