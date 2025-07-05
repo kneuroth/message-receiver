@@ -44,32 +44,39 @@ functions:
           path: /sendMessage
           method: post
 
+  getRawScoreboards:
+    handler: scoreboards.getRawScoreboards
+    events:
+      - httpApi:
+          path: /scoreboards/raw
+          method: get
+
   getScores:
     handler: scores.getScores
     events:
       - httpApi:
-          path: /getScores
+          path: /scores
           method: get
 
   addScore:
     handler: scores.addScore
     events:
       - httpApi:
-          path: /addScore
+          path: /score
           method: post
 
   deleteScore:
     handler: scores.deleteScore
     events:
       - httpApi:
-          path: /deleteScore/{primary_key}
+          path: /score/{primary_key}
           method: delete
 
   clearScores:
     handler: scores.clearScores
     events:
       - httpApi:
-          path: /deleteScores
+          path: /scores
           method: delete
 
 resources:
