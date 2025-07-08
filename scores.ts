@@ -10,7 +10,6 @@ module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
   })
 
   const response = await client.send(command)
-
   return {
     statusCode: 200,
     body: JSON.stringify(response.Items),
