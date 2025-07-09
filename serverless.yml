@@ -23,6 +23,7 @@ provider:
           Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-scoreTable-${sls:stage}
   environment:
     DYNAMODB_SCORE_TABLE: ${self:service}-scoreTable-${sls:stage}
+    DATABASE_URL: postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-silent-pine-aenqt4db-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
   httpApi:
     cors:
       allowedOrigins:
@@ -63,6 +64,13 @@ functions:
     events:
       - httpApi:
           path: /score
+          method: post
+
+  addNewScore:
+    handler: scores.addNewScore
+    events:
+      - httpApi:
+          path: /addNewScore
           method: post
 
   deleteScore:

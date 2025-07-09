@@ -16,6 +16,38 @@ module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
   }
 }
 
+import { neon } from '@neondatabase/serverless'
+import { drizzle } from 'drizzle-orm/neon-http';
+import { scoreTable } from './src/db/schema'
+
+module.exports.addNewScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  if (!req.body) {
+    return {
+      statusCode: 400,
+      body: 'No body',
+    }
+  } else {
+    const sql = neon(process.env.DATABASE_URL!);
+    const db = drizzle(sql);
+    const score: typeof scoreTable.$inferInsert = {
+      date: '2025-07-09',
+      player_id: 123,
+      chat_id: 123,
+      score: 2,
+      player_name: 'Kelly'
+    };
+    // Add body to table
+    const result = await db.insert(scoreTable).values(score);
+
+    const scores = await db.select().from(scoreTable);
+    console.log('Scores:', scores);
+    return {
+      statusCode: 200,
+      body: 'OK'
+    }
+  }
+}
+
 module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   if (!req.body) {
     return {
