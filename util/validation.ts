@@ -6,6 +6,7 @@ import {
   differenceInCalendarDays,
   startOfDay,
 } from 'date-fns'
+import { toZonedTime } from 'date-fns-tz';
 
 export type ScoreValidationResult =
   | { valid: true; score: number }
@@ -16,10 +17,12 @@ function matchTextFormat(text: string): RegExpMatchArray | null {
 }
 
 function isCorrectWordleNumber(wordleNumber: number): boolean {
-  const referenceDate = new Date('2025-06-19') // Wordle #1461
-  const referenceNumber = 1461
+  const referenceDate = new Date('2025-07-14') // Wordle #1461
+  const referenceNumber = 1486
 
-  const today = startOfDay(new Date())
+  const easternNow = toZonedTime(new Date(), 'America/New_York');
+  const today = startOfDay(easternNow)
+
   const days = differenceInCalendarDays(today, referenceDate)
   const expectedNumber = referenceNumber + days
 

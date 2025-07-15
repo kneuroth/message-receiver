@@ -1,49 +1,28 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { BatchWriteItemCommand, DeleteItemCommand, DeleteItemCommandInput, DynamoDBClient, PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb'
-import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb'
-import { insertScoreSchema } from './model/Score'
-
-module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
-  const client = DynamoDBDocumentClient.from(new DynamoDBClient({}))
-  const command = new ScanCommand({
-    TableName: process.env.DYNAMODB_SCORE_TABLE,
-  })
-
-  const response = await client.send(command)
-  return {
-    statusCode: 200,
-    body: JSON.stringify(response.Items),
-  }
-}
+import { createInsertSchema } from 'drizzle-zod'
 
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http';
 import { scoreTable } from './src/db/schema'
+import { eq } from 'drizzle-orm'
+import z from 'zod/v4';
 
-module.exports.addNewScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if (!req.body) {
-    return {
-      statusCode: 400,
-      body: 'No body',
-    }
-  } else {
-    const sql = neon(process.env.DATABASE_URL!);
-    const db = drizzle(sql);
-    const score: typeof scoreTable.$inferInsert = {
-      date: '2025-07-09',
-      player_id: 123,
-      chat_id: 123,
-      score: 2,
-      player_name: 'Kelly'
-    };
-    // Add body to table
-    const result = await db.insert(scoreTable).values(score);
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
+module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
+
+  try {
     const scores = await db.select().from(scoreTable);
-    console.log('Scores:', scores);
     return {
       statusCode: 200,
-      body: 'OK'
+      body: JSON.stringify(scores),
+    }
+  } catch (e) {
+    console.error('Error connecting to database:', e);
+    return {
+      statusCode: 500,
+      body: 'Error connecting to database',
     }
   }
 }
@@ -54,126 +33,82 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
       statusCode: 400,
       body: 'No body',
     }
-  }
-  const body = JSON.parse(req.body)
-  const insertScoreParse = insertScoreSchema.safeParse(body)
+  } else {
+    const insertScoreSchema = createInsertSchema(scoreTable);
 
-  if (!insertScoreParse.success) {
-    console.log('Invalid score insert:', req.body)
-    console.error('Error:', insertScoreParse.error.issues)
+    const scoreParse = insertScoreSchema.safeParse(JSON.parse(req.body));
 
-    return {
-      statusCode: 400,
-      body: 'Invalid score object',
-    }
-  }
+    if (!scoreParse.success) {
+      console.log('Invalid score insert:', req.body)
+      console.error('Error:', scoreParse.error.issues)
 
-  const insertScore = insertScoreParse.data;
-  // Attempt write to database
-  try {
-    const client = new DynamoDBClient({})
-    const pk =
-      String(insertScore.player_id) +
-      '_' +
-      String(insertScore.chat_id) +
-      '_' +
-      insertScore.date;
-    const input: PutItemCommandInput = {
-      TableName: process.env.DYNAMODB_SCORE_TABLE,
-      Item: {
-        primary_key: { S: pk },
-        player_id: { N: String(insertScore.player_id) },
-        player_name: { S: insertScore.player_name },
-        chat_id: { N: String(insertScore.chat_id) },
-        score: { N: String(insertScore.score) },
-        date: { S: String(insertScore.date) },
-      },
+      return {
+        statusCode: 400,
+        body: 'Invalid score object',
+      }
     }
-    const command = new PutItemCommand(input)
-    const response = await client.send(command)
-  } catch (e) {
-    // Handle database write errors
-    console.error(e)
-    return {
-      statusCode: 500,
-      body: 'Error writing to database',
-    }
-  } finally {
-    console.log('Wrote successfully')
-    return {
-      statusCode: 200,
-      body: 'Record inserted',
+    const score = scoreParse.data;
+
+    try {
+      const result = await db.insert(scoreTable).values(score);
+      return {
+        statusCode: 200,
+        body: 'OK'
+      }
+    } catch (e) {
+      console.error('Error connecting to database:', e);
+      return {
+        statusCode: 500,
+        body: 'Error connecting to database',
+      }
     }
   }
 }
 
 module.exports.deleteScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if (!req.pathParameters || !req.pathParameters.primary_key) {
+  if (!req.pathParameters || !req.pathParameters.id) {
     return {
       statusCode: 400,
       body: 'No primary key provided',
     }
   }
-  try {
-    const client = DynamoDBDocumentClient.from(new DynamoDBClient({}))
-    const pk = req.pathParameters.primary_key;
-    const input: DeleteItemCommandInput = {
-      TableName: process.env.DYNAMODB_SCORE_TABLE,
-      Key: {
-        primary_key: { S: pk },
-      },
-    }
-    const command = new DeleteItemCommand(input);
-    const response = await client.send(command)
-  } catch (e) {
-    console.error(e)
+  const pkParse = z.number().safeParse(req.pathParameters.id);
+  if (!pkParse.success) {
     return {
-      statusCode: 500,
-      body: 'Error deleting score',
+      statusCode: 400,
+      body: 'Invalid primary key',
     }
-  } finally {
-    console.log('Deleted successfully')
+  }
+  const pk = pkParse.data;
+  try {
+    const result = await db.delete(scoreTable).where(eq(scoreTable.id, pk));
     return {
       statusCode: 200,
-      body: 'Deleted score'
+      body: "Deleted score with id: " + pk
+    }
+  } catch (e) {
+    console.error('Error connecting to database:', e);
+    return {
+      statusCode: 500,
+      body: 'Error connecting to database',
     }
   }
 
 }
 
 module.exports.clearScores = async (): Promise<APIGatewayProxyResult> => {
-  const client = DynamoDBDocumentClient.from(new DynamoDBClient({}))
-  const command = new ScanCommand({
-    TableName: process.env.DYNAMODB_SCORE_TABLE,
-  })
-  const scanResult = await client.send(command)
-  const items = scanResult.Items || [];
+  try {
+    const result = await db.delete(scoreTable);
+    return {
+      statusCode: 200,
+      body: "Cleared scores"
+    }
+  } catch (e) {
+    console.error('Error connecting to database:', e);
+    return {
+      statusCode: 500,
+      body: 'Error connecting to database',
 
-  const batches = [];
-
-  for (let i = 0; i < items.length; i += 25) {
-    batches.push(items.slice(i, i + 25));
-  }
-
-  for (const batch of batches) {
-    const deleteRequests = batch.map((item) => ({
-      DeleteRequest: {
-        Key: {
-          primary_key: { S: item.primary_key } // TODO: Make a good primary key schema, reduce logic for inserting
-        },
-      },
-    }));
-
-    await client.send(
-      new BatchWriteItemCommand({
-        RequestItems: {
-          [String(process.env.DYNAMODB_SCORE_TABLE)]: deleteRequests,
-        },
-      })
-    );
-  }
-  return {
-    statusCode: 200,
-    body: "Cleared scores"
+    }
   }
 }

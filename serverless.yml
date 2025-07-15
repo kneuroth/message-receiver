@@ -9,33 +9,8 @@ configValidationMode: error
 provider:
   name: aws
   runtime: nodejs20.x
-  iam:
-    role:
-      statements:
-        - Effect: 'Allow'
-          Action:
-            - 'dynamodb:PutItem'
-            - 'dynamodb:Get*'
-            - 'dynamodb:Scan*'
-            - 'dynamodb:UpdateItem'
-            - 'dynamodb:DeleteItem'
-            - 'dynamodb:BatchWriteItem'
-          Resource: arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:service}-scoreTable-${sls:stage}
   environment:
-    DYNAMODB_SCORE_TABLE: ${self:service}-scoreTable-${sls:stage}
     DATABASE_URL: postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-silent-pine-aenqt4db-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-  httpApi:
-    cors:
-      allowedOrigins:
-        - '*'
-      allowedMethods:
-        - GET
-        - POST
-        - DELETE
-      allowedHeaders:
-        - Content-Type
-        - Authorization
-      maxAge: 86400
 
 functions:
   receiveMessage:
@@ -66,18 +41,11 @@ functions:
           path: /score
           method: post
 
-  addNewScore:
-    handler: scores.addNewScore
-    events:
-      - httpApi:
-          path: /addNewScore
-          method: post
-
   deleteScore:
     handler: scores.deleteScore
     events:
       - httpApi:
-          path: /score/{primary_key}
+          path: /scores/{id}
           method: delete
 
   clearScores:
@@ -86,17 +54,3 @@ functions:
       - httpApi:
           path: /scores
           method: delete
-
-resources:
-  Resources:
-    ScoreTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: primary_key
-            AttributeType: S
-        BillingMode: PAY_PER_REQUEST
-        KeySchema:
-          - AttributeName: primary_key
-            KeyType: HASH
-        TableName: ${self:service}-scoreTable-${sls:stage}
