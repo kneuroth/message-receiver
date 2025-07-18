@@ -44,7 +44,7 @@ module.exports.receiveMessage = async (
       score: validatedScore.score,
       player_name: update.message.from.first_name,
       date: new Date().toISOString().split('T')[0] // YYYY-MM-DD
-    })
+    }).onConflictDoUpdate({ target: [scoreTable.player_id, scoreTable.chat_id, scoreTable.date], set: { score: validatedScore.score } })
     return {
       statusCode: 200,
       body: 'Score is valid',

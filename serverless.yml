@@ -45,7 +45,7 @@ functions:
     handler: scores.deleteScore
     events:
       - httpApi:
-          path: /scores/{id}
+          path: /score
           method: delete
 
   clearScores:

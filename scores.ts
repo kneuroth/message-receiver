@@ -4,7 +4,7 @@ import { createInsertSchema } from 'drizzle-zod'
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http';
 import { scoreTable } from './src/db/schema'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import z from 'zod/v4';
 
 const sql = neon(process.env.DATABASE_URL!);
@@ -50,7 +50,7 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
     const score = scoreParse.data;
 
     try {
-      const result = await db.insert(scoreTable).values(score);
+      const result = await db.insert(scoreTable).values(score).onConflictDoUpdate({ target: [scoreTable.player_id, scoreTable.chat_id, scoreTable.date], set: { score: score.score } });
       return {
         statusCode: 200,
         body: 'OK'
@@ -66,25 +66,39 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
 }
 
 module.exports.deleteScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  if (!req.pathParameters || !req.pathParameters.id) {
+  if (!req.queryStringParameters || !req.queryStringParameters.player_id || !req.queryStringParameters.chat_id || !req.queryStringParameters.date) {
     return {
       statusCode: 400,
-      body: 'No primary key provided',
+      body: 'No primary key or partial primary key provided',
     }
   }
-  const pkParse = z.number().safeParse(req.pathParameters.id);
-  if (!pkParse.success) {
+
+  const playerIdParse = z.preprocess(val => Number(val), z.number()).safeParse(req.queryStringParameters.player_id);
+  const chatIdParse = z.preprocess(val => Number(val), z.number()).safeParse(req.queryStringParameters.chat_id);
+
+  // Make sure date is YYYY-MM-DD format
+  const dateParse = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).safeParse(req.queryStringParameters.date);
+
+  if (!playerIdParse.success || !chatIdParse.success || !dateParse.success) {
+    console.log('player parse', playerIdParse, 'chat parse', chatIdParse, 'date parse', dateParse);
     return {
       statusCode: 400,
       body: 'Invalid primary key',
     }
   }
-  const pk = pkParse.data;
+  const playerId = playerIdParse.data;
+  const chatId = chatIdParse.data;
+  const date = dateParse.data;
   try {
-    const result = await db.delete(scoreTable).where(eq(scoreTable.id, pk));
+    const result = await db.delete(scoreTable).where(
+      and(
+        eq(scoreTable.player_id, playerId),
+        eq(scoreTable.chat_id, chatId),
+        eq(scoreTable.date, date)
+      ));
     return {
       statusCode: 200,
-      body: "Deleted score with id: " + pk
+      body: "Deleted score with from player id:" + playerId + " in chat: " + chatId + " on date: " + date
     }
   } catch (e) {
     console.error('Error connecting to database:', e);
