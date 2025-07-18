@@ -34,7 +34,11 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
       body: 'No body',
     }
   } else {
-    const insertScoreSchema = createInsertSchema(scoreTable);
+    const insertScoreSchema = createInsertSchema(scoreTable).extend({
+      player_id: z.preprocess(val => Number(val), z.number()),
+      chat_id: z.preprocess(val => Number(val), z.number()),
+      score: z.preprocess(val => Number(val), z.number()),
+    });
 
     const scoreParse = insertScoreSchema.safeParse(JSON.parse(req.body));
 

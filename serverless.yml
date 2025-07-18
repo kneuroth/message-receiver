@@ -11,6 +11,18 @@ provider:
   runtime: nodejs20.x
   environment:
     DATABASE_URL: postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-silent-pine-aenqt4db-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+  httpApi:
+    cors:
+      allowedOrigins:
+        - '*'
+      allowedMethods:
+        - GET
+        - POST
+        - DELETE
+      allowedHeaders:
+        - Content-Type
+        - Authorization
+      maxAge: 86400
 
 functions:
   receiveMessage:
