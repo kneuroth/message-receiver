@@ -1,7 +1,10 @@
 import { Scoreboard } from "../model/Scoreboard";
 import { Score } from "../model/Score";
+import { ScoreSchema } from "../src/db/schema";
+import { getDate, lastDayOfMonth } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
 
-export function convertScoresToScoreboards(scores: Score[] | undefined): Scoreboard[] {
+export function convertScoresToScoreboards(scores: ScoreSchema[] | undefined): Scoreboard[] {
   if (!scores) {
     return []
   }
@@ -12,8 +15,8 @@ export function convertScoresToScoreboards(scores: Score[] | undefined): Scorebo
   // For each score
   for (const score of scores) {
     const chat_id = score.chat_id;
-    const month = score.date.substring(0, 7); // YYYY-MM format
-    const scoreboardKey = `${chat_id}_${month}`;
+    const yearMonth = score.date.substring(0, 7); // YYYY-MM format
+    const scoreboardKey = `${chat_id}_${yearMonth}`;
 
     const player_id = score.player_id;
     const player_name = score.player_name;
@@ -34,23 +37,41 @@ export function convertScoresToScoreboards(scores: Score[] | undefined): Scorebo
         scoreboards[scoreboardKey].players.push(newPlayer);
       }
     } else {
+      // If scoreboard does not exist, create a new player and a new scoreboard
       const player = {
         player_id: player_id,
         player_name: player_name,
         scores: { [score.date]: scoreValue }
       }
-      // Create a new scoreboard if it doesn't exist
       scoreboards[scoreboardKey] = {
         chat_id: chat_id,
-        month: month,
+        yearMonth: yearMonth,
         players: [player]
       };
     }
   }
-  // get the chat_id and month (from date) 
-  // if scoreboard for chat_id and month does not exist, create it
-  // if player does not exist in scoreboard, create it and add to scoreboard
 
+
+  // Fill in scores of 8 for all players in scoreboards with no scores from month's start to most recent date
+
+  for (let scoreboard of Object.values(scoreboards)) {
+    scoreboard.players.forEach(player => {
+      // Loop through all the dates from the start of the month to the most recent date
+      // If the player does not have a score for that date, create an entry with a score of 8
+      const todayEastern = toZonedTime(new Date(), 'America/New_York');
+      const startDate = new Date(`${scoreboard.yearMonth}-01`);
+      const endOfMonth = new Date(`${scoreboard.yearMonth}-${getDate(lastDayOfMonth(new Date(`${scoreboard.yearMonth}-01`)))}`);
+
+      const endDate = endOfMonth > todayEastern ? todayEastern : endOfMonth;
+
+      for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateKey = d.toISOString().split('T')[0]; // YYYY-MM-DD format
+        if (!player.scores[dateKey]) {
+          player.scores[dateKey] = 8; // Default score of 8
+        }
+      }
+    })
+  }
 
   return scoreboards ? Object.values(scoreboards) : [];
 }

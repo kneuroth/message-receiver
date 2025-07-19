@@ -13,7 +13,7 @@ export type PlayerScore = z.infer<typeof playerScoreSchema>;
 
 export const scoreboardSchema = z.object({
   chat_id: z.number(),
-  month: z.string(),
+  yearMonth: z.string(),
   players: z.array(playerScoreSchema)
 })
 
