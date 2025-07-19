@@ -43,7 +43,7 @@ functions:
     handler: scoreboards.getScoreboardsHtml
     events:
       - httpApi:
-          path: /scoreboards/html
+          path: /scoreboards/html/{chat_id}
           method: get
 
   getScores:

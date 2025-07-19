@@ -1,4 +1,4 @@
-import { APIGatewayProxyResult } from 'aws-lambda'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import { convertScoresToScoreboards } from './util/logic'
 import { scoreTable } from './src/db/schema'
 import { neon } from '@neondatabase/serverless';
@@ -8,6 +8,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { createHTMLFile } from './util/file-generation';
 import { createHtmlScoreboard } from './util/html-generation';
+import { eq } from 'drizzle-orm';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
@@ -39,23 +40,41 @@ module.exports.getRawScoreboards = async (): Promise<APIGatewayProxyResult> => {
   }
 }
 
-module.exports.getScoreboardsHtml = async (): Promise<APIGatewayProxyResult> => {
+module.exports.getScoreboardsHtml = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  if (!req.pathParameters || !req.pathParameters.chat_id) {
+    return {
+      statusCode: 400,
+      body: 'No chat_id provided',
+    }
+  }
 
+  const chatId = req.pathParameters?.chat_id;
   // get scores from database and then run convertScoresToScoreboards
   try {
-    const scores = await db.select().from(scoreTable);
-    // TODO: Where clause to filter by month if needed
+    const scores = await db.select().from(scoreTable).where(eq(scoreTable.chat_id, Number(chatId)));
     if (!scores || scores.length === 0) {
       return {
         statusCode: 200,
         body: JSON.stringify([]),
       }
     } else {
-      const scoreboards = convertScoresToScoreboards(scores);
-      const htmlPath = await createHTMLFile(createHtmlScoreboard(scoreboards));
-      return {
-        statusCode: 200,
-        body: await fs.readFile(htmlPath, 'utf-8'),
+      try {
+        const scoreboards = convertScoresToScoreboards(scores);
+        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb))));
+        const htmlScoreboards = await Promise.all(paths.map(path => fs.readFile(path, 'utf-8')));
+        return {
+          statusCode: 200,
+          headers: {
+            'Content-Type': 'text/html',
+          },
+          body: htmlScoreboards.join('\n'),
+        }
+      } catch (e) {
+        console.error('Error creating scoreboards:', e);
+        return {
+          statusCode: 500,
+          body: 'Error creating scoreboards',
+        }
       }
     }
   } catch (e) {
