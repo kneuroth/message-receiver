@@ -39,6 +39,13 @@ functions:
           path: /scoreboards/raw
           method: get
 
+  getScoreboardsHtml:
+    handler: scoreboards.getScoreboardsHtml
+    events:
+      - httpApi:
+          path: /scoreboards/html
+          method: get
+
   getScores:
     handler: scores.getScores
     events:
