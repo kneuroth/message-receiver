@@ -105,7 +105,8 @@ export function createScoreBars(scoreboard: Scoreboard): string {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      align-self: start;
+      justify-content: flex-end;
       color: white;
       font-size: 24px;
       font-weight: bold;

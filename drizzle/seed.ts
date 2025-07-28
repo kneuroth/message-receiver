@@ -6,6 +6,7 @@ import z from "zod/v4";
 import { scoreTable } from "../src/db/schema";
 import 'dotenv/config';
 import { SQL, Placeholder } from "drizzle-orm";
+import { ar } from "zod/dist/types/v4/locales";
 
 const players = [
   { player_id: 1, player_name: "Kelly" },
@@ -21,7 +22,8 @@ const insertScoreSchema = createInsertSchema(scoreTable).extend({
   score: z.preprocess(val => Number(val), z.number()),
 });
 
-async function main(daysAgo: number = 30) {
+async function main(daysAgo: number) {
+  console.log(daysAgo)
   const db = drizzle(process.env.DATABASE_URL!);
 
   var dayScores: { date: string | SQL<unknown> | Placeholder<string, any>; player_id: number | SQL<unknown> | Placeholder<string, any>; chat_id: number | SQL<unknown> | Placeholder<string, any>; score: number | SQL<unknown> | Placeholder<string, any>; player_name: string | SQL<unknown> | Placeholder<string, any>; }[] = [];
@@ -57,4 +59,6 @@ async function main(daysAgo: number = 30) {
 
 }
 
-main();
+const args = process.argv.slice(2)
+
+main(args[0] ? Number(args[0]) : 30);
