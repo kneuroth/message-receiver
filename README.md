@@ -16,3 +16,6 @@ This serverless application handles incoming messages from Telegram and records 
 ## YSK
 
 - Use drizzle-kit cli tool to make changes to data schema
+- Run `npx tsx drizzle/seed.ts` to seed database with dummy data
+  - Sometimes there's collisions with the insert, it's just RNG, run it again if you get an error like "Ensure that no rows proposed for insertion within the same command have duplicate constrained values"
+- Run `npx tsx drizzle/clear.ts` to clear database
