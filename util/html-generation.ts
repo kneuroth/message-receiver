@@ -2,6 +2,8 @@ import { getDaysInMonth } from "date-fns";
 import { Scoreboard } from "../model/Scoreboard";
 import { date } from "zod/v4";
 
+const COLORS = ['#b59f3b', '#538d4e'];
+
 export function createHtmlPodium(scoreboard: Scoreboard): string {
   const yearMonth = scoreboard.yearMonth;
   const chatId = scoreboard.chat_id;
@@ -69,7 +71,7 @@ export function createHtmlPodium(scoreboard: Scoreboard): string {
   </div>`
 }
 
-export function createScoreBars(scoreboard: Scoreboard): string {
+export function createScores(scoreboard: Scoreboard): string {
   const yearMonth = scoreboard.yearMonth;
 
   const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
@@ -88,42 +90,77 @@ export function createScoreBars(scoreboard: Scoreboard): string {
     }).join('');
 
     scoreBars += `
-    <div class="score-bar" style="height: ${playerTotalScore * 100 / highestPlayerScore}%; /* 0-100% based on inverse score */">
-      <h2 class="player-name">${player.player_name}</h2>
-      <h3 class="score"> ${playerTotalScore} </h3>
-      <div class="last-scores">
-        ${last5Scores}
-      </div>
+    <div class="player-area">
+    <div class="content">
+        <h2 class="player-name">${player.player_name}</h2>
+        <h3 class="score"> ${playerTotalScore} </h3>
+        <div class="last-scores">
+          ${last5Scores}
+        </div>
+      </div> 
+      <div class="wordle-grid">`
+      + Array.from({ length: maxScore }).map((_, i) => {
+        if (i < playerTotalScore - 1) {
+          return `<div class="tile" style="background-color: ${COLORS[Math.floor(Math.random() * 2)]}"></div>`
+        }
+        return '<div class="tile"></div>'
+      }).join('') +
+      `</div>
+      
     </div>`
   })
   return `
   <style>
-  .score-bar {
+    .wordle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 15px);
+      gap: 1px;
+      max-width: 100%;
+    }
+
+    .tile {
+      width: 10px;
+      height: 10px;
+      border: 2px solid #ccc;
+      font-weight: bold;
+      text-align: center;
+      text-transform: uppercase;
+      background-color: #3a3a3c;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+        
+    .player-area {
       width: 100%;
-      background-color: #7f8cff;
       border-radius: 4px 4px 0 0;
+      justify-items: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      height: auto;
+    }
+
+    .content {
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
       align-self: start;
-      justify-content: flex-end;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
+      justify-content: center;
+      z-index: 1;
     }
-  .last-scores {
-    font-size: 16px;
-  }
-  .player-name {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: auto;
+    .last-scores {
+      font-size: 16px;
     }
-  .score {
-      font-size: 25px;
-      font-weight: bold;
-      margin-bottom: auto;
-  }
+    .player-name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: auto;
+      }
+    .score {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: auto;
+    }
   </style>
   ${scoreBars}
   `
@@ -134,27 +171,28 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   const yearMonth = scoreboard.yearMonth;
   const chatId = scoreboard.chat_id;
 
-  const scoreBars = createScoreBars(scoreboard);
+  const scoreBars = createScores(scoreboard);
   return `
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px; 
     }
-     .bar-container {
+     .container {
       width: 800px;
-      height: 200px;
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: flex-end;
       background: #f0f0f0;
       border-radius: 8px;
       padding: 10px;
+      gap: 20px;
     }
   </style>
   
   <h1>Scoreboard for ${yearMonth}</h1>
-  <div class="bar-container">
+  <div class="container">
     ${scoreBars}
   </div>`;
 }

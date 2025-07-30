@@ -1,4 +1,3 @@
-
 import { drizzle } from "drizzle-orm/node-postgres";
 import { addDays, format, subDays } from "date-fns";
 import { createInsertSchema } from "drizzle-zod";
@@ -51,14 +50,14 @@ async function main(daysAgo: number) {
   }
 
   try {
-    await db.insert(scoreTable).values(dayScores)//.onConflictDoUpdate({ target: [scoreTable.player_id, scoreTable.chat_id, scoreTable.date], set: { score: 8 } });;
+    await db.insert(scoreTable).values(dayScores)
 
   } catch (e) {
     console.error('Error inserting seed data:', e);
   }
 
+
 }
 
 const args = process.argv.slice(2)
-
 main(args[0] ? Number(args[0]) : 30);
