@@ -100,8 +100,9 @@ export function createScores(scoreboard: Scoreboard): string {
       </div> 
       <div class="wordle-grid">`
       + Array.from({ length: maxScore }).map((_, i) => {
-        if (i < playerTotalScore - 1) {
-          return `<div class="tile" style="background-color: ${COLORS[Math.floor(Math.random() * 2)]}"></div>`
+        if (i < playerTotalScore) {
+          const color = Math.round(Math.random()) === 1 ? 'yellow' : 'green'
+          return `<div class="${color}-tile"></div>`//console.log(COLORS[Math.floor(Math.random() * 2)])
         }
         return '<div class="tile"></div>'
       }).join('') +
@@ -118,15 +119,22 @@ export function createScores(scoreboard: Scoreboard): string {
       max-width: 100%;
     }
 
-    .tile {
+    .tile, .yellow-tile, .green-tile {
       width: 10px;
       height: 10px;
       border: 2px solid #ccc;
       font-weight: bold;
       text-align: center;
       text-transform: uppercase;
-      background-color: #3a3a3c;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .green-tile {
+      background-color: #538d4e;
+    }
+
+    .yellow-tile {
+      background-color:  #b59f3b;
     }
         
     .player-area {
@@ -184,7 +192,7 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      background: #f0f0f0;
+      background: #121213;
       border-radius: 8px;
       padding: 10px;
       gap: 20px;
