@@ -25,6 +25,18 @@ provider:
       maxAge: 86400
 
 functions:
+  sendScoreboards:
+    handler: sender.sendScoreboards
+    events:
+      - schedule: cron(0 4 * * ? *)
+
+  sendScoreboardsTest:
+    handler: sender.sendScoreboards
+    events:
+      - httpApi:
+          path: /sendScoreboardsTest
+          method: get
+
   receiveMessage:
     handler: receiveMessage.receiveMessage
     events:
@@ -44,6 +56,13 @@ functions:
     events:
       - httpApi:
           path: /scoreboards/html/{chat_id}
+          method: get
+
+  getScoreboardsPng:
+    handler: scoreboards.getScoreboardsPng
+    events:
+      - httpApi:
+          path: /scoreboards/png/{chat_id}
           method: get
 
   getScores:

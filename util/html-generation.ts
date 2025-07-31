@@ -187,7 +187,6 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
       margin: 20px; 
     }
      .container {
-      width: 800px;
       height: auto;
       display: flex;
       align-items: center;
