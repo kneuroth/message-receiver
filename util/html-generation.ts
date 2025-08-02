@@ -1,4 +1,4 @@
-import { getDaysInMonth } from "date-fns";
+import { format, getDaysInMonth } from "date-fns";
 import { Scoreboard } from "../model/Scoreboard";
 import { date } from "zod/v4";
 
@@ -86,7 +86,12 @@ export function createScores(scoreboard: Scoreboard): string {
     const maxSlice = 5 > player.scores.length ? player.scores.length : 5;
 
     const last5Scores = Object.entries(player.scores).sort((a, b) => b[0].localeCompare(a[0])).slice(0, maxSlice).map((dateScore) => {
-      return `${dateScore[0]}: ${dateScore[1]}<br>`
+      return `
+        <div style="display: flex; justify-content: space-between">
+          <span style="font-weight:bold">${format(new Date(dateScore[0]), 'EEEE')}</span> 
+          <span>${dateScore[1]}</span>
+        </div>
+      `
     }).join('');
 
     scoreBars += `
@@ -102,7 +107,7 @@ export function createScores(scoreboard: Scoreboard): string {
       + Array.from({ length: maxScore }).map((_, i) => {
         if (i < playerTotalScore) {
           const color = Math.round(Math.random()) === 1 ? 'yellow' : 'green'
-          return `<div class="${color}-tile"></div>`//console.log(COLORS[Math.floor(Math.random() * 2)])
+          return `<div class="${color}-tile"></div>`
         }
         return '<div class="tile"></div>'
       }).join('') +
@@ -158,6 +163,7 @@ export function createScores(scoreboard: Scoreboard): string {
     }
     .last-scores {
       font-size: 16px;
+      width: 100%;
     }
     .player-name {
         font-size: 20px;
@@ -192,13 +198,11 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
       align-items: center;
       justify-content: flex-end;
       background: #121213;
-      border-radius: 8px;
       padding: 10px;
       gap: 20px;
     }
   </style>
   
-  <h1>Scoreboard for ${yearMonth}</h1>
   <div class="container">
     ${scoreBars}
   </div>`;

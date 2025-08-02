@@ -34,7 +34,7 @@ async function main(daysAgo: number) {
     Array.from(players.values()).forEach((player) => {
 
       const score = {
-        chat_id: 99, // Random chat_id between 98 and 99
+        chat_id: -4960367936, // Random chat_id between 98 and 99
         player_id: player.player_id,
         player_name: player.player_name,
         score: Math.floor(Math.random() * 8) + 1, // Random score between 1 and 8

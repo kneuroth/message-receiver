@@ -61,8 +61,8 @@ module.exports.getScoreboardsHtml = async (req: APIGatewayProxyEvent): Promise<A
     } else {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
-        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb))));
-        const htmlScoreboards = await Promise.all(paths.map(path => fs.readFile(path, 'utf-8')));
+        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb), sb.chat_id)));
+        const htmlScoreboards = await Promise.all(paths.map(pathResult => fs.readFile(pathResult.path, 'utf-8')));
         return {
           statusCode: 200,
           headers: {
@@ -110,8 +110,8 @@ module.exports.getScoreboardsPng = async (req: APIGatewayProxyEvent): Promise<AP
     } else {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
-        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb))));
-        const htmlScoreboards = await Promise.all(paths.map(path => fs.readFile(path, 'utf-8')));
+        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb), sb.chat_id)));
+        const htmlScoreboards = await Promise.all(paths.map(pathResult => fs.readFile(pathResult.path, 'utf-8')));
         await nodeHtmlToImage({
           output: './image.png',
           html: htmlScoreboards.join('\n')

@@ -5,6 +5,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
     "@types/aws-lambda": "^8.10.150",
+    "axios": "^1.11.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotnet": "^1.1.4",
@@ -12,6 +13,7 @@
     "drizzle-orm": "^0.44.2",
     "drizzle-seed": "^0.3.1",
     "drizzle-zod": "^0.8.2",
+    "form-data": "^4.0.4",
     "node-html-to-image": "^5.0.0",
     "pg": "^8.16.3",
     "zod": "^3.25.64"
