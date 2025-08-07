@@ -39,12 +39,12 @@ module.exports.sendScoreboards = async () => {
             html: htmlBuffer.toString()
           })
           const imageBuffer = await fs.readFile('./image.png')
-          // TODO: Envirofy wordle bot id
           const form = new FormData();
           form.append('chat_id', String(pathResult.chatId));
           form.append('photo', imageBuffer, 'image.png');
+          const BOT_TOKEN = process.env.BOT_TOKEN!;
           axios.post(
-            'https://api.telegram.org/bot8195866237:AAF1zEP264bSHtNwy1wqD78w_mkCk41Aa14/sendPhoto',
+            `https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`,
             form
           )
 
@@ -54,7 +54,7 @@ module.exports.sendScoreboards = async () => {
           body: "Scoreboards sent"
         }
       } catch (e) {
-        console.error('Error creating scoreboards:',);
+        console.error('Error creating scoreboards:', e);
         return {
           statusCode: 500,
           body: 'Error creating scoreboards',
