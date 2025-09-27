@@ -12,38 +12,16 @@ import { toZonedTime } from "date-fns-tz";
 import { format, startOfDay, startOfMonth } from "date-fns";
 import axios from "axios";
 import FormData from "form-data";
+import { printFileTree } from "./util/debug";
+
+const fss = require('fs');
+const path = require('path');
 
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
-
-const fss = require('fs');
-const path = require('path');
-
-function printFileTree(directoryPath: string, indent = '') {
-  try {
-    const items = fss.readdirSync(directoryPath);
-
-    items.forEach((item: any) => {
-      const itemPath = path.join(directoryPath, item);
-      const stats = fss.statSync(itemPath);
-
-      const isDirectory = stats.isDirectory();
-      const perms = (stats.mode & 0o777).toString(8); // string like "755" or "644"
-
-      console.log(`${indent}${isDirectory ? '📁' : '📄'} ${perms} ${item}`);
-
-      if (isDirectory) {
-        printFileTree(itemPath, indent + '  '); // Increase indent for subdirectories
-      }
-    });
-  } catch (err) {
-    console.error(`Error reading directory ${directoryPath}: ${err}`);
-  }
-}
-
 
 module.exports.sendScoreboards = async () => {
 
@@ -54,6 +32,7 @@ module.exports.sendScoreboards = async () => {
     const today = format(startOfDay(easternNow), 'yyyy-MM-dd');
     const startOfMonthDate = format(startOfMonth(easternNow), 'yyyy-MM-dd');
 
+    // Query for scores
     const scores = await db.select().from(scoreTable).where(between(scoreTable.date, startOfMonthDate, today));
 
     console.log("Scores fetched:", scores.length);
@@ -68,8 +47,7 @@ module.exports.sendScoreboards = async () => {
         const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb), sb.chat_id)));
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 
-        console.log('printing /opt/chromium')
-        printFileTree('/opt/chromium')
+        // printFileTree('/opt/chromium')
 
         // Resolve Chromium executable once and log it
         let chromiumExecutable: string | undefined;
@@ -123,9 +101,11 @@ module.exports.sendScoreboards = async () => {
             let page: any | undefined;
             try {
               page = await browser.newPage();
-              page.on('console', (msg: any) => console.log('PAGE console:', msg.text()));
-              page.on('error', (err: any) => console.error('PAGE error:', err));
-              page.on('pageerror', (err: any) => console.error('PAGE pageerror:', err));
+
+              // Uncomment for debugging
+              // page.on('console', (msg: any) => console.log('PAGE console:', msg.text()));
+              // page.on('error', (err: any) => console.error('PAGE error:', err));
+              // page.on('pageerror', (err: any) => console.error('PAGE pageerror:', err));
 
               await page.setViewport({ width: 1200, height: 800 });
               await page.setContent(htmlBuffer.toString(), { waitUntil: 'networkidle0' });
