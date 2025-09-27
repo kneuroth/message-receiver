@@ -5,7 +5,6 @@ import z from "zod/v4";
 import { scoreTable } from "../src/db/schema";
 import 'dotenv/config';
 import { SQL, Placeholder } from "drizzle-orm";
-import { ar } from "zod/dist/types/v4/locales";
 
 const players = [
   { player_id: 1, player_name: "Kelly" },

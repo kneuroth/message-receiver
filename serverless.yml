@@ -11,6 +11,7 @@ provider:
   runtime: nodejs20.x
   environment:
     DATABASE_URL: postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-silent-pine-aenqt4db-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+    BOT_TOKEN: '8195866237:AAHcxKujhxXd0pexg05ZphZ-2qtO6g4hxPc'
   httpApi:
     cors:
       allowedOrigins:
@@ -27,15 +28,15 @@ provider:
 functions:
   sendScoreboards:
     handler: sender.sendScoreboards
-    layers:
-      - arn:aws:lambda:us-east-1:764866452798:layer:chrome-aws-lambda:40
+    timeout: 300 # 5 minutes
+    memorySize: 3008 # 3 GB
     events:
       - schedule: cron(0 4 * * ? *)
+    layers:
+      - arn:aws:lambda:us-east-1:960010173416:layer:chromiumBinaries:1
 
   sendScoreboardsTest:
     handler: sender.sendScoreboards
-    layers:
-      - arn:aws:lambda:us-east-1:764866452798:layer:chrome-aws-lambda:40
     events:
       - httpApi:
           path: /sendScoreboardsTest
