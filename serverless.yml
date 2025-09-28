@@ -27,7 +27,7 @@ provider:
 
 functions:
   sendScoreboards:
-    handler: sender.sendScoreboards
+    handler: src/functions/sender.sendScoreboards
     timeout: 300 # 5 minutes
     memorySize: 3008 # 3 GB
     events:
@@ -35,64 +35,50 @@ functions:
     layers:
       - arn:aws:lambda:us-east-1:960010173416:layer:chromiumBinaries:1
 
-  sendScoreboardsTest:
-    handler: sender.sendScoreboards
-    events:
-      - httpApi:
-          path: /sendScoreboardsTest
-          method: get
-
   receiveMessage:
-    handler: receiveMessage.receiveMessage
+    handler: src/functions/receiver.receiveMessage
     events:
       - httpApi:
           path: /sendMessage
           method: post
 
   getRawScoreboards:
-    handler: scoreboards.getRawScoreboards
+    handler: src/functions/scoreboards.getRawScoreboards
     events:
       - httpApi:
           path: /scoreboards/raw
           method: get
 
   getScoreboardsHtml:
-    handler: scoreboards.getScoreboardsHtml
+    handler: src/functions/scoreboards.getScoreboardsHtml
     events:
       - httpApi:
           path: /scoreboards/html/{chat_id}
           method: get
 
-  getScoreboardsPng:
-    handler: scoreboards.getScoreboardsPng
-    events:
-      - httpApi:
-          path: /scoreboards/png/{chat_id}
-          method: get
-
   getScores:
-    handler: scores.getScores
+    handler: src/functions/scores.getScores
     events:
       - httpApi:
           path: /scores
           method: get
 
   addScore:
-    handler: scores.addScore
+    handler: src/functions/scores.addScore
     events:
       - httpApi:
           path: /score
           method: post
 
   deleteScore:
-    handler: scores.deleteScore
+    handler: src/functions/scores.deleteScore
     events:
       - httpApi:
           path: /score
           method: delete
 
   clearScores:
-    handler: scores.clearScores
+    handler: src/functions/scores.clearScores
     events:
       - httpApi:
           path: /scores

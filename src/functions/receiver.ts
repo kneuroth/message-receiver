@@ -1,16 +1,17 @@
-import { updateSchema } from './model/Update'
+
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { isValidScoreForToday } from './util/validation'
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http'
-import { scoreTable } from './src/db/schema'
+import { isValidScoreForToday } from '@utils/validation';
+import { scoreTable } from '@db/schema';
+import { updateSchema } from '@model/Update';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
 
-module.exports.receiveMessage = async (
+export async function receiveMessage(
   req: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
+): Promise<APIGatewayProxyResult> {
   if (!req.body) {
     return {
       statusCode: 400,

@@ -1,10 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import nodeHtmlToImage from "node-html-to-image";
-import { scoreTable } from "./src/db/schema";
-import { createHTMLFile, HTMLCreationResult } from "./util/file-generation";
-import { createHtmlScoreboard } from "./util/html-generation";
-import { convertScoresToScoreboards } from "./util/logic";
+import { scoreTable } from "../db/schema";
 import fs from 'fs/promises';
 import os from 'os';
 import { between } from "drizzle-orm";
@@ -12,18 +8,19 @@ import { toZonedTime } from "date-fns-tz";
 import { format, startOfDay, startOfMonth } from "date-fns";
 import axios from "axios";
 import FormData from "form-data";
-import { printFileTree } from "./util/debug";
+import chromium from "@sparticuz/chromium";
+import puppeteer from "puppeteer-core";
+import { convertScoresToScoreboards } from "@utils/logic";
+import { createHTMLFile } from "@utils/file-generation";
+import { createHtmlScoreboard } from "@utils/html-generation";
 
 const fss = require('fs');
 const path = require('path');
 
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
-
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
 
-module.exports.sendScoreboards = async () => {
+export async function sendScoreboards() {
 
   console.log("Sending scoreboards...");
   try {

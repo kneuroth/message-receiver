@@ -3,14 +3,14 @@ import { createInsertSchema } from 'drizzle-zod'
 
 import { neon } from '@neondatabase/serverless'
 import { drizzle } from 'drizzle-orm/neon-http';
-import { scoreTable } from './src/db/schema'
 import { and, eq } from 'drizzle-orm'
 import z from 'zod/v4';
+import { scoreTable } from '@db/schema';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
 
-module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
+export async function getScores(): Promise<APIGatewayProxyResult> {
 
   try {
     const scores = await db.select().from(scoreTable);
@@ -27,7 +27,7 @@ module.exports.getScores = async (): Promise<APIGatewayProxyResult> => {
   }
 }
 
-module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function addScore(req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   if (!req.body) {
     return {
       statusCode: 400,
@@ -69,7 +69,7 @@ module.exports.addScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayP
   }
 }
 
-module.exports.deleteScore = async (req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export async function deleteScore(req: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
   if (!req.queryStringParameters || !req.queryStringParameters.player_id || !req.queryStringParameters.chat_id || !req.queryStringParameters.date) {
     return {
       statusCode: 400,
@@ -114,7 +114,7 @@ module.exports.deleteScore = async (req: APIGatewayProxyEvent): Promise<APIGatew
 
 }
 
-module.exports.clearScores = async (): Promise<APIGatewayProxyResult> => {
+export async function clearScores(): Promise<APIGatewayProxyResult> {
   try {
     const result = await db.delete(scoreTable);
     return {

@@ -1,6 +1,5 @@
+import { Scoreboard } from "@model/Scoreboard";
 import { format, getDaysInMonth } from "date-fns";
-import { Scoreboard } from "../model/Scoreboard";
-import { date } from "zod/v4";
 
 const COLORS = ['#b59f3b', '#538d4e'];
 

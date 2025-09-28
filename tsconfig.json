@@ -2,7 +2,14 @@
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
-    "outDir": ".build"
+    "outDir": ".build",
+    "baseUrl": "./src",
+    "paths": {
+      "@functions/*": ["functions/*"],
+      "@db/*": ["db/*"],
+      "@utils/*": ["util/*"],
+      "@model/*": ["model/*"]
+    }
   },
   "include": ["./**/*.ts"],
   "exclude": ["node_modules", ".build"]

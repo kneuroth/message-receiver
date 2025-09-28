@@ -1,6 +1,5 @@
-import { Scoreboard } from "../model/Scoreboard";
-import { Score } from "../model/Score";
-import { ScoreSchema } from "../src/db/schema";
+import { ScoreSchema } from "@db/schema";
+import { Scoreboard } from "@model/Scoreboard";
 import { getDate, lastDayOfMonth } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 

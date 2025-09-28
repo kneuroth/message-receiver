@@ -1,4 +1,4 @@
-import { WORDLE_SCORE_MATCH_REGEX } from '../constants'
+
 import { Update } from '../model/Update'
 import {
   fromUnixTime,
@@ -11,6 +11,8 @@ import { toZonedTime } from 'date-fns-tz';
 export type ScoreValidationResult =
   | { valid: true; score: number }
   | { valid: false; reason: string }
+
+const WORDLE_SCORE_MATCH_REGEX = /^Wordle (\d{1,2},?\d{3}) ([1-6X])\/6/;
 
 function matchTextFormat(text: string): RegExpMatchArray | null {
   return text.match(WORDLE_SCORE_MATCH_REGEX)
