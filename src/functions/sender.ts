@@ -104,7 +104,7 @@ export async function sendScoreboards() {
               // page.on('error', (err: any) => console.error('PAGE error:', err));
               // page.on('pageerror', (err: any) => console.error('PAGE pageerror:', err));
 
-              await page.setViewport({ width: 1200, height: 800 });
+              await page.setViewport({ width: 1000, height: 800 });
               await page.setContent(htmlBuffer.toString(), { waitUntil: 'networkidle0' });
 
               const tmpImagePath = path.join(os.tmpdir(), `image-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.png`);

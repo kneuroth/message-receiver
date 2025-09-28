@@ -1,5 +1,6 @@
 import { Scoreboard } from "@model/Scoreboard";
 import { format, getDaysInMonth } from "date-fns";
+import { hashColor } from "./color-hash";
 
 const COLORS = ['#b59f3b', '#538d4e'];
 
@@ -80,6 +81,8 @@ export function createScores(scoreboard: Scoreboard): string {
   ));
   var scoreBars = '';
   scoreboard.players.forEach(player => {
+    const playerColor = 'background-color: red;';
+
     const playerTotalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
 
     const maxSlice = 5 > player.scores.length ? player.scores.length : 5;
@@ -106,7 +109,7 @@ export function createScores(scoreboard: Scoreboard): string {
       + Array.from({ length: maxScore }).map((_, i) => {
         if (i < playerTotalScore) {
           const color = Math.round(Math.random()) === 1 ? 'yellow' : 'green'
-          return `<div class="${color}-tile"></div>`
+          return `<div class="tile" style="${playerColor}"></div>`
         }
         return '<div class="tile"></div>'
       }).join('') +
@@ -180,29 +183,188 @@ export function createScores(scoreboard: Scoreboard): string {
 }
 
 
+// export function createHtmlScoreboard(scoreboard: Scoreboard): string {
+//   const yearMonth = scoreboard.yearMonth;
+//   const chatId = scoreboard.chat_id;
+
+//   const scoreBars = createScores(scoreboard);
+//   return `
+//   <style>
+//     body {
+//       font-family: Arial, sans-serif;
+//       margin: 20px; 
+//     }
+//      .container {
+//       height: auto;
+//       display: flex;
+//       align-items: center;
+//       justify-content: flex-end;
+//       background: #121213;
+//       padding: 10px;
+//       gap: 20px;
+//     }
+//   </style>
+
+//   <div class="container">
+//     ${scoreBars}
+//   </div>`;
+// }
+
 export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   const yearMonth = scoreboard.yearMonth;
-  const chatId = scoreboard.chat_id;
 
-  const scoreBars = createScores(scoreboard);
+  const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
+  const maxScore = daysInMonth * 8;
   return `
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px; 
-    }
-     .container {
-      height: auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      background: #121213;
-      padding: 10px;
-      gap: 20px;
-    }
-  </style>
+  body {
+    font-family: sans-serif;
+    font-size: 26px;
+    color: #f8f8f8;
+    background-color: #121213;
+    width: 1200px;
+  }
+
+  .behind-all {
+    position: absolute;
+    width: 1200px;
+    z-index: -1; /* Negative z-index */
+  }
+
+  .tile {
+    aspect-ratio: 1 / 1;
+    border: 10px solid #121213;
+    border-radius: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #3a3a3c;
+  }
+
+  .wordle-grid {
+    display: flex;
+    flex-direction: column;
+    filter: blur(35px);
+  }
+
+  .wordle-grid-row {
+    display: flex;
+  }
+
+  .scoreboard {
+    padding-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .player-entry {
+    width: 90%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #b0b0b068;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.432); /* Optional: adds a subtle shadow */
+    border-radius: 10px;
+    border: rgba(244, 244, 244, 0.817) 8 1px solid;
+  }
+
+  .progress-bar {
+    height: 3rem;
+    width: 60%;
+    background-color: #8e8e91a8;
+    backdrop-filter: blur(5px);
+    border-radius: 4px;
+    border: 4px solid #d8d5d550;
+    align-items: center;
+    box-shadow: #1e1e24 0 0 10px;
+  }
+
+  .progress {
+    height: 3rem;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    backdrop-filter: blur(5px);
+    background-color: rgba(14, 25, 122, 0.788);
+    align-content: center;
+  }
+
+  p.score {
+    margin: 0;
+    margin-left: 1rem;
+    text-wrap: nowrap;
+  }
+
+  .player-details {
+    text-shadow: #3a3a3c 0 0 9px;
+    display: flex;
+    width: 30%;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  h3.name {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 200px;
+  }
+</style>
+
+<body>
+  <div class="behind-all">
+    <script>
+      const container = document.createElement('div')
+      container.className = 'wordle-grid'
+      const rows = 6
+      const cols = 5 // change numbers for bigger/smaller grid
+
+      const yellow = '#b59f3b'
+      const green = '#538d4e'
+      const absent = '#3a3a3c'
+
+      const colors = [absent, yellow, green]
+
+      const scoreboard = document.getElementById('scoreboard')
+      for (let i = 0; i < rows; i++) {
+        const row = document.createElement('div')
+        row.className = 'wordle-grid-row'
+        for (let i = 0; i < cols; i++) {
+          const tile = document.createElement('div')
+          tile.className = 'tile'
+          tile.style.width = '20%'
+          tile.style.backgroundColor = colors[Math.floor(Math.random() * 3)]
+          row.appendChild(tile)
+        }
+        container.appendChild(row)
+      }
+      document.currentScript.replaceWith(container)
+    </script>
+  </div>
   
-  <div class="container">
-    ${scoreBars}
-  </div>`;
+  <div class="scoreboard">
+  ${scoreboard.players.map(player => {
+    const playerColor = hashColor(player.player_id, scoreboard.chat_id);
+    const playerTotalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
+    const playerName = player.player_name;
+    const scorePercentage = (playerTotalScore / maxScore) * 100;
+    return `<div class="player-entry">
+      <div class="player-details">
+        <h3 class="name">${playerName}</h3>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: ${scorePercentage}%; background-color: ${playerColor};">
+          <p class="score">${playerTotalScore} pts</p>
+        </div>
+      </div>
+    </div>`
+  }).join('\n')}
+
+  </div>
+</body>
+
+
+ `
 }
