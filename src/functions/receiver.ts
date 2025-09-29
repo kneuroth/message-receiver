@@ -14,7 +14,7 @@ export async function receiveMessage(
 ): Promise<APIGatewayProxyResult> {
   if (!req.body) {
     return {
-      statusCode: 400,
+      statusCode: 200,
       body: 'No body',
     }
   }
@@ -27,7 +27,7 @@ export async function receiveMessage(
     console.error('Error:', updateParse.error.issues)
 
     return {
-      statusCode: 400,
+      statusCode: 200,
       body: 'Invalid telegram Update',
     }
   }
