@@ -269,12 +269,14 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
     justify-content: space-around;
     align-items: center;
     border-radius: 25px 0px 25px 0px;
+    background-color: #8584848f;
+    box-shadow: 0 0 10px #8584848f;
   }
 
   .scoreboard > .player-entry:nth-of-type(1) {
-    background-color: #538d4e82;
-    box-shadow: 0 0 10px #538d4e82;
-    border: 1px solid #538d4ef1;
+    background-color: #538d4e;
+    box-shadow: 0 0 10px #538d4e;
+    border: 1px solid #538d4e;
   }
 
   .scoreboard > .player-entry:nth-of-type(1) .name {
@@ -288,8 +290,8 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   }
 
   .scoreboard > .player-entry:nth-of-type(3) {
-    background-color: #b59f3ba4;
-    box-shadow: 0 0 10px #b59f3ba4;
+    background-color: #b59f3bce;
+    box-shadow: 0 0 10px #b59f3bce;
   }
 
   .progress-bar {
@@ -354,7 +356,8 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
           <p class="score">${playerTotalScore}</p>
         </div>
       </div>
-    </div>`
+    </div>
+    `
   }).join('\n')}
 
   </div>
