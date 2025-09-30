@@ -5,6 +5,7 @@
     color: #f8f8f8;
     background-color: #121213;
     width: 1200px;
+    padding: 10px;
   }
 
   .behind-all {
@@ -26,7 +27,7 @@
   .wordle-grid {
     display: flex;
     flex-direction: column;
-    filter: blur(35px);
+    filter: blur(60px);
   }
 
   .wordle-grid-row {
@@ -34,12 +35,14 @@
   }
 
   .scoreboard {
-    padding-top: 15px;
+    padding: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
     width: 100%;
+    border-radius: 55px 0px 55px 0px;
+    background-color: #3a3a3c;
   }
 
   .player-entry {
@@ -47,10 +50,28 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #b0b0b068;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.432); /* Optional: adds a subtle shadow */
-    border-radius: 10px;
-    border: rgba(244, 244, 244, 0.817) 8 1px solid;
+    border-radius: 25px 0px 25px 0px;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(1) {
+    background-color: #538d4e82;
+    box-shadow: 0 0 10px #538d4e82;
+    border: 1px solid #538d4ef1;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(1) .name {
+    font-size: 40px;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(2) {
+    background-color: #b59f3b;
+    box-shadow: 0 0 10px #b59f3b;
+    border: 1px solid #b59f3b;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(3) {
+    background-color: #b59f3ba4;
+    box-shadow: 0 0 10px #b59f3ba4;
   }
 
   .progress-bar {
@@ -77,6 +98,8 @@
     margin: 0;
     margin-left: 1rem;
     text-wrap: nowrap;
+    text-shadow: #111111 0 0 9px;
+    font-weight: bold;
   }
 
   .player-details {
@@ -97,65 +120,43 @@
 
 <body>
   <div class="behind-all">
-    <script>
+    <!-- <script>
       const container = document.createElement('div')
       container.className = 'wordle-grid'
-      const rows = 6
-      const cols = 5 // change numbers for bigger/smaller grid
+      const rows = 30
+      const cols = 20 // change numbers for bigger/smaller grid
 
       const yellow = '#b59f3b'
       const green = '#538d4e'
       const absent = '#3a3a3c'
 
-      const colors = [absent, yellow, green]
+      const colors = [absent, yellow, green, absent, absent, absent, absent] // more absents to make them more common
 
       const scoreboard = document.getElementById('scoreboard')
       for (let i = 0; i < rows; i++) {
         const row = document.createElement('div')
         row.className = 'wordle-grid-row'
-        for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < cols; j++) {
           const tile = document.createElement('div')
           tile.className = 'tile'
-          tile.style.width = '20%'
-          tile.style.backgroundColor = colors[Math.floor(Math.random() * 3)]
+          tile.style.width = String(100 / cols) + '%'
+          tile.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)]
           row.appendChild(tile)
         }
         container.appendChild(row)
       }
       document.currentScript.replaceWith(container)
-    </script>
+    </script> -->
   </div>
   <div class="scoreboard">
     <div class="player-entry">
       <div class="player-details">
-        <h1>1st</h1>
         <h3 class="name">Kelly</h3>
       </div>
       <div class="progress-bar">
         <div class="progress" style="width: 20%">
-          <p class="score">125 pts</p>
-        </div>
-      </div>
-    </div>
-    <div class="player-entry">
-      <div class="player-details">
-        <h1>2nd</h1>
-        <h3 class="name">Heatherbb23</h3>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: 20%">
-          <p class="score">125 pts</p>
-        </div>
-      </div>
-    </div>
-    <div class="player-entry">
-      <div class="player-details">
-        <h1>3rd</h1>
-        <h3 class="name">Heatherbb23</h3>
-      </div>
-      <div class="progress-bar">
-        <div class="progress" style="width: 20%">
-          <p class="score">125 pts</p>
+          <p class="score">125</p>
         </div>
       </div>
     </div>
@@ -165,7 +166,27 @@
       </div>
       <div class="progress-bar">
         <div class="progress" style="width: 20%">
-          <p class="score">125 pts</p>
+          <p class="score">125</p>
+        </div>
+      </div>
+    </div>
+    <div class="player-entry">
+      <div class="player-details">
+        <h3 class="name">Heatherbb23</h3>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 20%">
+          <p class="score">125</p>
+        </div>
+      </div>
+    </div>
+    <div class="player-entry">
+      <div class="player-details">
+        <h3 class="name">Heatherbb23</h3>
+      </div>
+      <div class="progress-bar">
+        <div class="progress" style="width: 20%">
+          <p class="score">125</p>
         </div>
       </div>
     </div>

@@ -216,13 +216,14 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
   const maxScore = daysInMonth * 8;
   return `
-  <style>
+<style>
   body {
     font-family: sans-serif;
     font-size: 26px;
     color: #f8f8f8;
     background-color: #121213;
     width: 1200px;
+    padding: 10px;
   }
 
   .behind-all {
@@ -244,7 +245,7 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   .wordle-grid {
     display: flex;
     flex-direction: column;
-    filter: blur(35px);
+    filter: blur(60px);
   }
 
   .wordle-grid-row {
@@ -252,12 +253,14 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   }
 
   .scoreboard {
-    padding-top: 15px;
+    padding: 25px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
     width: 100%;
+    border-radius: 55px 0px 55px 0px;
+    background-color: #3a3a3c;
   }
 
   .player-entry {
@@ -265,10 +268,28 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #b0b0b068;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.432); /* Optional: adds a subtle shadow */
-    border-radius: 10px;
-    border: rgba(244, 244, 244, 0.817) 8 1px solid;
+    border-radius: 25px 0px 25px 0px;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(1) {
+    background-color: #538d4e82;
+    box-shadow: 0 0 10px #538d4e82;
+    border: 1px solid #538d4ef1;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(1) .name {
+    font-size: 40px;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(2) {
+    background-color: #b59f3b;
+    box-shadow: 0 0 10px #b59f3b;
+    border: 1px solid #b59f3b;
+  }
+
+  .scoreboard > .player-entry:nth-of-type(3) {
+    background-color: #b59f3ba4;
+    box-shadow: 0 0 10px #b59f3ba4;
   }
 
   .progress-bar {
@@ -295,6 +316,8 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
     margin: 0;
     margin-left: 1rem;
     text-wrap: nowrap;
+    text-shadow: #111111 0 0 9px;
+    font-weight: bold;
   }
 
   .player-details {
@@ -314,35 +337,7 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
 </style>
 
 <body>
-  <div class="behind-all">
-    <script>
-      const container = document.createElement('div')
-      container.className = 'wordle-grid'
-      const rows = 6
-      const cols = 5 // change numbers for bigger/smaller grid
-
-      const yellow = '#b59f3b'
-      const green = '#538d4e'
-      const absent = '#3a3a3c'
-
-      const colors = [absent, yellow, green]
-
-      const scoreboard = document.getElementById('scoreboard')
-      for (let i = 0; i < rows; i++) {
-        const row = document.createElement('div')
-        row.className = 'wordle-grid-row'
-        for (let i = 0; i < cols; i++) {
-          const tile = document.createElement('div')
-          tile.className = 'tile'
-          tile.style.width = '20%'
-          tile.style.backgroundColor = colors[Math.floor(Math.random() * 3)]
-          row.appendChild(tile)
-        }
-        container.appendChild(row)
-      }
-      document.currentScript.replaceWith(container)
-    </script>
-  </div>
+  
   
   <div class="scoreboard">
   ${scoreboard.players.map(player => {
@@ -356,7 +351,7 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
       </div>
       <div class="progress-bar">
         <div class="progress" style="width: ${scorePercentage}%; background-color: ${playerColor};">
-          <p class="score">${playerTotalScore} pts</p>
+          <p class="score">${playerTotalScore}</p>
         </div>
       </div>
     </div>`
