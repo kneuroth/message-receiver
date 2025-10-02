@@ -71,116 +71,6 @@ export function createHtmlPodium(scoreboard: Scoreboard): string {
   </div>`
 }
 
-export function createScores(scoreboard: Scoreboard): string {
-  const yearMonth = scoreboard.yearMonth;
-
-  const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
-  const maxScore = daysInMonth * 8; // Assuming max score is 8 per day
-  const highestPlayerScore = Math.max(...scoreboard.players.map(player =>
-    Object.values(player.scores).reduce((a, b) => a + b, 0)
-  ));
-  var scoreBars = '';
-  scoreboard.players.forEach(player => {
-    const playerColor = 'background-color: red;';
-
-    const playerTotalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
-
-    const maxSlice = 5 > player.scores.length ? player.scores.length : 5;
-
-    const last5Scores = Object.entries(player.scores).sort((a, b) => b[0].localeCompare(a[0])).slice(0, maxSlice).map((dateScore) => {
-      return `
-        <div style="display: flex; justify-content: space-between">
-          <span style="font-weight:bold">${format(new Date(dateScore[0]), 'EEEE')}</span> 
-          <span>${dateScore[1]}</span>
-        </div>
-      `
-    }).join('');
-
-    scoreBars += `
-    <div class="player-area">
-    <div class="content">
-        <h2 class="player-name">${player.player_name}</h2>
-        <h3 class="score"> ${playerTotalScore} </h3>
-        <div class="last-scores">
-          ${last5Scores}
-        </div>
-      </div> 
-      <div class="wordle-grid">`
-      + Array.from({ length: maxScore }).map((_, i) => {
-        if (i < playerTotalScore) {
-          const color = Math.round(Math.random()) === 1 ? 'yellow' : 'green'
-          return `<div class="tile" style="${playerColor}"></div>`
-        }
-        return '<div class="tile"></div>'
-      }).join('') +
-      `</div>
-      
-    </div>`
-  })
-  return `
-  <style>
-    .wordle-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, 15px);
-      gap: 1px;
-      max-width: 100%;
-    }
-
-    .tile, .yellow-tile, .green-tile {
-      width: 10px;
-      height: 10px;
-      border: 2px solid #ccc;
-      font-weight: bold;
-      text-align: center;
-      text-transform: uppercase;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    .green-tile {
-      background-color: #538d4e;
-    }
-
-    .yellow-tile {
-      background-color:  #b59f3b;
-    }
-        
-    .player-area {
-      width: 100%;
-      border-radius: 4px 4px 0 0;
-      justify-items: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      height: auto;
-    }
-
-    .content {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      align-self: start;
-      justify-content: center;
-      z-index: 1;
-    }
-    .last-scores {
-      font-size: 16px;
-      width: 100%;
-    }
-    .player-name {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: auto;
-      }
-    .score {
-        font-size: 25px;
-        font-weight: bold;
-        margin-bottom: auto;
-    }
-  </style>
-  ${scoreBars}
-  `
-}
 
 
 // export function createHtmlScoreboard(scoreboard: Scoreboard): string {
@@ -342,12 +232,18 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
   
   
   <div class="scoreboard">
-  ${scoreboard.players.map(player => {
-    const playerColor = hashColor(player.player_id, scoreboard.chat_id);
-    const playerTotalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
-    const playerName = player.player_name;
-    const scorePercentage = (playerTotalScore / maxScore) * 100;
-    return `<div class="player-entry">
+  ${scoreboard.players
+      .sort((playerA, playerB) => {
+        const aTotalScore = Object.values(playerA.scores).reduce((a, b) => a + b, 0);
+        const bTotalScore = Object.values(playerB.scores).reduce((a, b) => a + b, 0);
+        return aTotalScore - bTotalScore;
+      }).
+      map(player => {
+        const playerColor = hashColor(player.player_id, scoreboard.chat_id);
+        const playerTotalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
+        const playerName = player.player_name;
+        const scorePercentage = (playerTotalScore / maxScore) * 100;
+        return `<div class="player-entry">
       <div class="player-details">
         <h3 class="name">${playerName}</h3>
       </div>
@@ -358,7 +254,7 @@ export function createHtmlScoreboard(scoreboard: Scoreboard): string {
       </div>
     </div>
     `
-  }).join('\n')}
+      }).join('\n')}
 
   </div>
 </body>

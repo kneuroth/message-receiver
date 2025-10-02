@@ -5,7 +5,7 @@ import fs from 'fs/promises';
 import os from 'os';
 import { between } from "drizzle-orm";
 import { toZonedTime } from "date-fns-tz";
-import { format, startOfDay, startOfMonth } from "date-fns";
+import { format, startOfDay, startOfMonth, subDays } from "date-fns";
 import axios from "axios";
 import FormData from "form-data";
 import chromium from "@sparticuz/chromium";
@@ -24,13 +24,15 @@ export async function sendScoreboards() {
 
   console.log("Sending scoreboards...");
   try {
-    // Get scores where date is between current start of month and today
-    const easternNow = toZonedTime(new Date(), 'America/New_York');
-    const today = format(startOfDay(easternNow), 'yyyy-MM-dd');
-    const startOfMonthDate = format(startOfMonth(easternNow), 'yyyy-MM-dd');
+    // Get scores where date is between current start of month and yesterday
+    const easternToday = toZonedTime(new Date(), 'America/New_York')
+    const easternYesterday = subDays(easternToday, 1);
+
+    const yesterday = format(startOfDay(easternYesterday), 'yyyy-MM-dd');
+    const startOfMonthDate = format(startOfMonth(easternYesterday), 'yyyy-MM-dd');
 
     // Query for scores
-    const scores = await db.select().from(scoreTable).where(between(scoreTable.date, startOfMonthDate, today));
+    const scores = await db.select().from(scoreTable).where(between(scoreTable.date, startOfMonthDate, yesterday));
 
     console.log("Scores fetched:", scores.length);
     if (!scores || scores.length === 0) {
