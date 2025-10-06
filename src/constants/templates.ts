@@ -30,24 +30,22 @@ export const SCOREBOARD_TEMPLATE = `
   }
 
   .scoreboard {
-    padding: 25px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
     width: 100%;
-    border-radius: 10px 10px 10px 10px;
     border: 1px solid #78787d;
     box-shadow: #888890 0 0 5px;
     background-color: #121213;
   }
 
   .player-entry {
-    width: 90%;
+    width: 100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-radius: 25px 0 0 0;
     background-color: #8584848f;
     box-shadow: 0 0 10px #8584848f;
   }
@@ -113,7 +111,6 @@ export const SCOREBOARD_TEMPLATE = `
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width: 200px;
   }
 </style>
 

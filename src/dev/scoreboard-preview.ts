@@ -11,15 +11,29 @@ async function main() {
         name: "Kelly",
         latestScore: 4,
         scorePercentage: 77,
-        color: "#rgba(0, 65, 149, 1)",
+        color: "rgba(0, 65, 149, 1)",
         totalScore: 44
       },
       {
         name: "Geofferey",
         latestScore: 7,
         scorePercentage: 66,
-        color: "#rgba(42, 188, 20, 1)",
+        color: "rgba(42, 188, 20, 1)",
         totalScore: 33
+      },
+      {
+        name: "Mattios",
+        latestScore: 7,
+        scorePercentage: 45,
+        color: "rgba(240, 191, 43, 1)",
+        totalScore: 22
+      },
+      {
+        name: "Chapporieoes",
+        latestScore: 4,
+        scorePercentage: 20,
+        color: "rgba(188, 20, 132, 1)",
+        totalScore: 15
       }
     ]
   }
