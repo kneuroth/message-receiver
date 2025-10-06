@@ -8,7 +8,8 @@
       "@functions/*": ["functions/*"],
       "@db/*": ["db/*"],
       "@utils/*": ["util/*"],
-      "@model/*": ["model/*"]
+      "@model/*": ["model/*"],
+      "@constants/*": ["constants/*"]
     }
   },
   "include": ["./**/*.ts"],

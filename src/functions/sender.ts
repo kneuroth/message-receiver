@@ -10,9 +10,10 @@ import axios from "axios";
 import FormData from "form-data";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
-import { convertScoresToScoreboards } from "@utils/logic";
+import { convertScoresToScoreboards } from "@utils/conversions";
 import { createHTMLFile } from "@utils/file-generation";
 import { createHtmlScoreboard } from "@utils/html-generation";
+import { lambdaLaunchArgs } from "@utils/browser";
 
 const fss = require('fs');
 const path = require('path');
@@ -43,55 +44,13 @@ export async function sendScoreboards() {
     } else {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
+
         const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb), sb.chat_id)));
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 
-        // printFileTree('/opt/chromium')
-
-        // Resolve Chromium executable once and log it
-        let chromiumExecutable: string | undefined;
-        try {
-          // pass the layer path so -min packages also work
-          chromiumExecutable = await chromium.executablePath('/opt/chromium/bin');
-        } catch (err) {
-          console.warn('chromium.executablePath() threw:', err);
-        }
-
-        console.log('resolved chromium executable:', chromiumExecutable);
-
-        // If we got a path, check it exists (extra safety)
-        if (chromiumExecutable) {
-          try {
-            const stat = fss.statSync(chromiumExecutable);
-            console.log('chromium executable stats:', { size: stat.size, mode: (stat.mode & 0o777).toString(8) });
-          } catch (err) {
-            console.warn('chromium executable not accessible:', err);
-          }
-        }
-
-        console.log("Starting image generation with improved Puppeteer args");
-
-        // Common flags that help running Chrome in Lambda
-        const extraArgs = [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-        ];
-
-        // Launch a single browser instance and process pages sequentially to avoid
-        // exhausting memory/FDs in Lambda (Promise.all was creating many concurrent
-        // browser/pages which caused the "Target closed" errors).
-        const launchArgs = {
-          executablePath: chromiumExecutable || await chromium.executablePath('/opt/chromium/bin'),
-          args: [...(chromium.args || []), ...extraArgs],
-          headless: true,
-          dumpio: true,
-          ignoreHTTPSErrors: true,
-          timeout: 120000,
-        };
-
         let browser: any | undefined;
         try {
+          const launchArgs = await lambdaLaunchArgs();
           console.log('Launching shared browser with args:', launchArgs.args);
           browser = await puppeteer.launch(launchArgs);
 
@@ -100,11 +59,6 @@ export async function sendScoreboards() {
             let page: any | undefined;
             try {
               page = await browser.newPage();
-
-              // Uncomment for debugging
-              // page.on('console', (msg: any) => console.log('PAGE console:', msg.text()));
-              // page.on('error', (err: any) => console.error('PAGE error:', err));
-              // page.on('pageerror', (err: any) => console.error('PAGE pageerror:', err));
 
               await page.setViewport({ width: 1000, height: 800 });
               await page.setContent(htmlBuffer.toString(), { waitUntil: 'networkidle0' });

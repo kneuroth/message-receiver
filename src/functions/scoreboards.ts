@@ -7,7 +7,7 @@ import fs from 'fs/promises';
 import { scoreTable } from '@db/schema';
 import { createHTMLFile } from '@utils/file-generation';
 import { createHtmlScoreboard } from '@utils/html-generation';
-import { convertScoresToScoreboards } from '@utils/logic';
+import { convertScoresToScoreboards } from '@utils/conversions';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);

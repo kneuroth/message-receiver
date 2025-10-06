@@ -1,7 +1,36 @@
 import { ScoreSchema } from "@db/schema";
+import { ScoreboardContext } from "@model/Context";
 import { Scoreboard } from "@model/Scoreboard";
-import { getDate, lastDayOfMonth } from "date-fns";
+import { format, getDate, getDaysInMonth, lastDayOfMonth, subDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
+import { hashColor } from "./color-hash";
+
+export function convertScoreboardToContext(scoreboard: Scoreboard): ScoreboardContext {
+  const yearMonth = scoreboard.yearMonth;
+
+  const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
+  const maxScore = daysInMonth * 8;
+
+  return {
+    players: scoreboard.players
+      .sort((playerA, playerB) => {
+        const aTotalScore = Object.values(playerA.scores).reduce((a, b) => a + b, 0);
+        const bTotalScore = Object.values(playerB.scores).reduce((a, b) => a + b, 0);
+        return aTotalScore - bTotalScore;
+      }).
+      map(player => {
+        const totalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
+
+        return {
+          name: player.player_name,
+          latestScore: player.scores[format(subDays(new Date(), 1), 'yyyy-MM-dd')] || 0,
+          scorePercentage: (totalScore / maxScore) * 100,
+          color: hashColor(player.player_id, scoreboard.chat_id),
+          totalScore: totalScore
+        }
+      })
+  }
+}
 
 export function convertScoresToScoreboards(scores: ScoreSchema[] | undefined): Scoreboard[] {
   if (!scores) {
