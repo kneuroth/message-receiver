@@ -102,9 +102,15 @@ export const SCOREBOARD_TEMPLATE = `
   .player-details {
     text-shadow: #3a3a3c 0 0 9px;
     display: flex;
-    width: 30%;
+    width: 35%;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .score-section {
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
   h3.name {
@@ -120,7 +126,10 @@ export const SCOREBOARD_TEMPLATE = `
       <div class='player-entry'>
         <div class='player-details'>
           <h3 class='name'>{{name}}</h3>
-          <p>+{{latestScore}}</p>
+          <div class='score-section'>
+            <p>+{{latestScore}}</p> 
+            {{& emoji }}
+          </div>
         </div>
         <div class='progress-bar'>
           <div
