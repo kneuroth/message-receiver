@@ -1,12 +1,13 @@
 import { DEFAULT_SCORE_SVG_MAP } from "../constants/svg-maps";
-import { SCOREBOARD_TEMPLATE } from "../constants/templates";
+import { DEFAULT_SCOREBOARD_TEMPLATE, CHRISTMAS_SCOREBOARD_TEMPLATE } from "../constants/templates";
 import { ScoreboardContext } from "@model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 
 async function main() {
 
-  const SCORE_MAP = DEFAULT_SCORE_SVG_MAP
+  const SCORE_MAP = DEFAULT_SCORE_SVG_MAP;
+  const TEMPLATE = DEFAULT_SCOREBOARD_TEMPLATE;
 
   const scoreboardContext: ScoreboardContext = {
     players: [
@@ -85,7 +86,7 @@ async function main() {
       },
     ]
   }
-  const template = Handlebars.compile(SCOREBOARD_TEMPLATE)
+  const template = Handlebars.compile(TEMPLATE)
   const html = template(scoreboardContext);
   await fs.writeFile("preview.html", html);
   console.log("✅ Wrote preview.html — open it in a browser");
