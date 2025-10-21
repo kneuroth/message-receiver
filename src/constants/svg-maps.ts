@@ -1,6 +1,6 @@
-import { ROCKET_SVG, FIRE_HEART_SVG, FIRE_SVG, CLAP_SVG, NEUTRAL_FACE_SVG, POOP_SVG, CLOWN_SVG, MAD_FACE_SVG, CRY_FACE_SVG } from "./svgs";
+import { ROCKET_SVG, FIRE_HEART_SVG, FIRE_SVG, CLAP_SVG, NEUTRAL_FACE_SVG, POOP_SVG, CLOWN_SVG, MAD_FACE_SVG, CRY_FACE_SVG, SANTA_SVG, COLD_GUY_SVG, PRESENT_SVG, CHRISTMAS_TREE_SVG, SNOW_CLOUD_SVG, ROCK_SVG } from "./svgs";
 
-export const DEFAULT_SCORE_SVG_MAP: { [key: number]: string } = {
+export const DEFAULT_SVG_MAP: { [key: number]: string } = {
   0: ROCKET_SVG,
   1: FIRE_HEART_SVG,
   2: FIRE_SVG,
@@ -9,5 +9,17 @@ export const DEFAULT_SCORE_SVG_MAP: { [key: number]: string } = {
   5: MAD_FACE_SVG,
   6: CRY_FACE_SVG,
   7: POOP_SVG,
+  8: CLOWN_SVG,
+}
+
+export const CHRISTMAS_SVG_MAP: { [key: number]: string } = {
+  0: ROCKET_SVG,
+  1: FIRE_HEART_SVG,
+  2: PRESENT_SVG,
+  3: CHRISTMAS_TREE_SVG,
+  4: SANTA_SVG,
+  5: COLD_GUY_SVG,
+  6: SNOW_CLOUD_SVG,
+  7: ROCK_SVG,
   8: CLOWN_SVG,
 }

@@ -4,16 +4,12 @@ import { Scoreboard } from "@model/Scoreboard";
 import { format, getDate, getDaysInMonth, lastDayOfMonth, subDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { hashColor } from "./color-hash";
-import { FIRE_SVG } from "@constants/svgs";
-import { DEFAULT_SCORE_SVG_MAP } from "@constants/svg-maps";
 
-export function convertScoreboardToContext(scoreboard: Scoreboard): ScoreboardContext {
+export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [key: number]: string }): ScoreboardContext {
   const yearMonth = scoreboard.yearMonth;
 
   const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
   const maxScore = daysInMonth * 8;
-
-  const SCORE_SVG_MAP = DEFAULT_SCORE_SVG_MAP
 
   return {
     players: scoreboard.players
@@ -28,7 +24,7 @@ export function convertScoreboardToContext(scoreboard: Scoreboard): ScoreboardCo
         return {
           name: player.player_name,
           latestScore: latestScore,
-          emoji: SCORE_SVG_MAP[latestScore],
+          emoji: svgMap[latestScore],
           scorePercentage: (totalScore / maxScore) * 100,
           color: hashColor(player.player_id, scoreboard.chat_id),
           totalScore: totalScore

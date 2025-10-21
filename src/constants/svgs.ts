@@ -47,3 +47,33 @@ export const ROCKET_SVG = `<img
   src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f680.svg"
   alt="rocket" width="32" height="32" loading="lazy" decoding="async">
 `;
+
+export const SANTA_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f385.svg"
+  alt="santa claus" width="32" height="32" loading="lazy" decoding="async">
+`;
+
+export const COLD_GUY_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f976.svg"
+  alt="cold face" width="32" height="32" loading="lazy" decoding="async">
+`;
+
+export const PRESENT_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f381.svg"
+  alt="wrapped present" width="32" height="32" loading="lazy" decoding="async">
+`;
+
+export const CHRISTMAS_TREE_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f384.svg"
+  alt="christmas tree" width="32" height="32" loading="lazy" decoding="async">
+`;
+
+export const SNOW_CLOUD_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f328.svg"
+  alt="cloud w  ith snow" width="32" height="32" loading="lazy" decoding="async">
+`;
+
+export const ROCK_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1faa8.svg"
+  alt="rock" width="32" height="32" loading="lazy" decoding="async">
+`;

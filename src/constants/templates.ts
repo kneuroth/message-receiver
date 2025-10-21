@@ -213,22 +213,6 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
     box-shadow: 0 6px 14px #000a, inset 0 0 0 1px #0006;
     overflow: hidden;
   }
-  /* small ribbon tab */
-  .player-entry::before{
-    content:"";
-    position:absolute; left:0; top:0;
-    width: 14px; height: 100%;
-    background: linear-gradient(180deg, var(--holly), #8b1212);
-  }
-  /* ornament string */
-  .player-entry::after{
-    content:"";
-    position:absolute; left:36px; top:-16px;
-    width: 90px; height: 32px;
-    border-bottom: 4px solid #2d4;
-    border-radius: 50%;
-    opacity:.25;
-  }
 
   /* podium accents */
   .scoreboard > .player-entry:nth-of-type(1){
@@ -238,15 +222,6 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
   }
   .scoreboard > .player-entry:nth-of-type(1) .name { font-size: 40px; color: #fff; text-shadow: 0 0 12px #0c2; }
 
-  .scoreboard > .player-entry:nth-of-type(2){
-    background: linear-gradient(180deg, #6b5b16, #4f4312);
-    border-color: #705d1a;
-  }
-
-  .scoreboard > .player-entry:nth-of-type(3){
-    background: linear-gradient(180deg, #514d3a, #3d3a2c);
-    border-color: #5a5642;
-  }
 
   .player-details {
     display: flex;
@@ -303,10 +278,7 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
     height: 100%;
     min-width: 4%;
     border-radius: 999px;
-    background:
-      linear-gradient(180deg, #e9fff5, #d2ffe9 30%, #b9ffd9 60%, #8ef0bd 100%),
-      radial-gradient(60px 60px at 10% 40%, #ffffffcc 0, transparent 70%);
-    box-shadow: inset 0 -8px 16px #0b4, inset 0 2px 8px #fff8, 0 0 12px #5effb3aa;
+    box-shadow: inset 0 -8px 16px rgba(255, 255, 255, 0.32), inset 0 2px 8px #fff8, 0 0 12px #5effb3aa;
     position: relative;
   }
 
@@ -319,7 +291,6 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
     font-weight: 900;
     color: #063;
     mix-blend-mode: multiply;
-    line-height: 3.25rem;
   }
 
   /* legacy classes kept (not used here but safe) */
@@ -355,7 +326,7 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
         <div class='progress-bar'>
           <div
             class='progress'
-            style='width: {{scorePercentage}}%; {{#if color}}background: linear-gradient(180deg, {{color}}, {{color}} 60%, #ffffff22 100%);{{/if}}'
+            style='width: {{scorePercentage}}%; {{#if color}}background: linear-gradient(180deg, {{color}});{{/if}}'
           >
             <p class='score'>{{totalScore}}</p>
           </div>

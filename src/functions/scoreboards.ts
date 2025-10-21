@@ -8,6 +8,8 @@ import { scoreTable } from '@db/schema';
 import { createHTMLFile } from '@utils/file-generation';
 import { createHtmlScoreboard } from '@utils/html-generation';
 import { convertScoresToScoreboards } from '@utils/conversions';
+import { CHRISTMAS_SCOREBOARD_TEMPLATE, DEFAULT_SCOREBOARD_TEMPLATE } from '@constants/templates';
+import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from '@constants/svg-maps';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
@@ -59,7 +61,7 @@ export async function getScoreboardsHtml(req: APIGatewayProxyEvent): Promise<API
     } else {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
-        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb), sb.chat_id)));
+        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, DEFAULT_SCOREBOARD_TEMPLATE, DEFAULT_SVG_MAP), sb.chat_id)));
         const htmlScoreboards = await Promise.all(paths.map(pathResult => fs.readFile(pathResult.path, 'utf-8')));
         return {
           statusCode: 200,
