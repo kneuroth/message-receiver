@@ -14,7 +14,7 @@ import { convertScoresToScoreboards } from "@utils/conversions";
 import { createHTMLFile } from "@utils/file-generation";
 import { createHtmlScoreboard } from "@utils/html-generation";
 import { lambdaLaunchArgs } from "@utils/browser";
-import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "@constants/templates";
+import { CHRISTMAS_SCOREBOARD_TEMPLATE, DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates";
 import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from "@constants/svg-maps";
 
 const fss = require('fs');
@@ -47,7 +47,7 @@ export async function sendScoreboards() {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
 
-        const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, CHRISTMAS_SCOREBOARD_TEMPLATE, DEFAULT_SVG_MAP), sb.chat_id)));
+        const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, DEFAULT_SCOREBOARD_TEMPLATE, DEFAULT_SVG_MAP), sb.chat_id)));
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 
         let browser: any | undefined;

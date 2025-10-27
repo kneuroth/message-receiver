@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build:scoreboard": "npx ts-node ./src/dev/scoreboard-preview.ts"
+    "build:scoreboard": "npx nodemon ./src/dev/scoreboard-preview.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
