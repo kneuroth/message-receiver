@@ -5,6 +5,8 @@ import { drizzle } from 'drizzle-orm/neon-http'
 import { isValidScoreForToday } from '@utils/validation';
 import { scoreTable } from '@db/schema';
 import { updateSchema } from '@model/Update';
+import { toZonedTime } from 'date-fns-tz';
+import { format } from 'date-fns';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
@@ -44,7 +46,8 @@ export async function receiveMessage(
       chat_id: update.message.chat.id,
       score: validatedScore.score,
       player_name: update.message.from.first_name,
-      date: new Date().toISOString().split('T')[0] // YYYY-MM-DD
+      // write date in America/New_York (Eastern) timezone as YYYY-MM-DD
+      date: format(toZonedTime(new Date(), 'America/New_York'), 'yyyy-MM-dd')
     }).onConflictDoUpdate({ target: [scoreTable.player_id, scoreTable.chat_id, scoreTable.date], set: { score: validatedScore.score } })
     return {
       statusCode: 200,

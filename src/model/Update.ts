@@ -3,7 +3,7 @@ import { z } from 'zod/v4'
 export const fromSchema = z.object({
   id: z.number(),
   first_name: z.string(),
-  username: z.string(),
+  username: z.string().optional(),
 })
 export type From = z.infer<typeof fromSchema>
 
