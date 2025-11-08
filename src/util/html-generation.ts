@@ -1,6 +1,13 @@
 import { Scoreboard } from "@model/Scoreboard";
-import { convertScoreboardToContext } from "./conversions";
+import { convertPodiumToContext, convertScoreboardToContext } from "./conversions";
 import Handlebars from "handlebars";
+import { Podium } from "@model/Podium";
+
+export function createHtmlPodium(podium: Podium, template: string): string {
+  const templateDelegate = Handlebars.compile(template);
+  const context = convertPodiumToContext(podium);
+  return templateDelegate(context);
+}
 
 export function createHtmlScoreboard(scoreboard: Scoreboard, template: string, svgMap: { [key: number]: string }): string {
   const templateDelegate = Handlebars.compile(template);

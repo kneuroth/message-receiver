@@ -15,6 +15,10 @@ This serverless application handles incoming messages from Telegram and records 
 
 ## YSK
 
+- To develop views run `npm run build:scoreboard` or `npm run build:podium`
+- Import and use the desired view in src/dev/scoreboard-preview.ts or podium-preview.ts
+- Open preview.html in browser
+
 - User serverless commands to push to AWS:
 - Run `serverless deploy` to deploy to dev
 - Run `serverless dev` to run locally

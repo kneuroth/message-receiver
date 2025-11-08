@@ -1,5 +1,5 @@
+import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/christmas-scoreboard";
 import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from "../constants/svg-maps";
-import { DEFAULT_SCOREBOARD_TEMPLATE, CHRISTMAS_SCOREBOARD_TEMPLATE } from "../constants/templates";
 import { ScoreboardContext } from "@model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";

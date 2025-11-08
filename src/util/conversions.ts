@@ -1,13 +1,38 @@
 import { ScoreSchema } from "@db/schema";
-import { ScoreboardContext } from "@model/Context";
+import { PodiumContext, ScoreboardContext } from "@model/Context";
 import { Scoreboard } from "@model/Scoreboard";
 import { format, getDate, getDaysInMonth, lastDayOfMonth, subDays } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { hashColor } from "./color-hash";
+import { Podium } from "@model/Podium";
+import { generateStatForPlayer } from "./stats";
+
+export function convertPodiumToContext(podium: Podium): PodiumContext {
+
+  return {
+    players: podium.players
+      .sort((playerA, playerB) => {
+        const aTotalScore = Object.values(playerA.scores).reduce((a, b) => a + b, 0);
+        const bTotalScore = Object.values(playerB.scores).reduce((a, b) => a + b, 0);
+        return aTotalScore - bTotalScore;
+      }).
+      map((player, index) => {
+        const totalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
+        return {
+          name: player.player_name,
+          position: index + 1,
+          color: hashColor(player.player_id, podium.chat_id),
+          totalScore: totalScore,
+          stat: player.stat || ''
+        }
+      })
+  }
+}
 
 export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [key: number]: string }): ScoreboardContext {
   const yearMonth = scoreboard.yearMonth;
 
+  // This date is to be trusted because it comes from the scoreboard's yearMonth
   const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
   const maxScore = daysInMonth * 8;
 
@@ -20,7 +45,7 @@ export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [ke
       }).
       map(player => {
         const totalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
-        const latestScore = player.scores[format(subDays(new Date(), 1), 'yyyy-MM-dd')] || 0;
+        const latestScore = player.scores[format(subDays(toZonedTime(new Date(), 'America/New_York'), 1), 'yyyy-MM-dd')] || 0;
         return {
           name: player.player_name,
           latestScore: latestScore,
@@ -103,4 +128,31 @@ export function convertScoresToScoreboards(scores: ScoreSchema[] | undefined): S
   }
 
   return scoreboards ? Object.values(scoreboards) : [];
+}
+
+export function convertScoreboardsToPoduims(scoreboards: Scoreboard[] | undefined): Podium[] {
+  if (!scoreboards) {
+    return []
+  }
+
+  let podiums: Podium[] = [];
+
+  scoreboards.forEach(scoreboard => {
+
+    podiums.push({
+      chat_id: scoreboard.chat_id,
+      yearMonth: scoreboard.yearMonth,
+      players: scoreboard.players.map(player => {
+        const stat = generateStatForPlayer(player.player_name, player.scores);
+        return {
+          player_id: player.player_id,
+          player_name: player.player_name,
+          scores: player.scores,
+          stat: stat
+        }
+      })
+    });
+
+  });
+  return podiums;
 }

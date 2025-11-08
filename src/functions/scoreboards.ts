@@ -8,8 +8,8 @@ import { scoreTable } from '@db/schema';
 import { createHTMLFile } from '@utils/file-generation';
 import { createHtmlScoreboard } from '@utils/html-generation';
 import { convertScoresToScoreboards } from '@utils/conversions';
-import { CHRISTMAS_SCOREBOARD_TEMPLATE, DEFAULT_SCOREBOARD_TEMPLATE } from '@constants/templates';
 import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from '@constants/svg-maps';
+import { DEFAULT_SCOREBOARD_TEMPLATE } from '@constants/templates/scoreboards/default-scoreboard';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);

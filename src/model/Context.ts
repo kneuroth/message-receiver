@@ -10,5 +10,11 @@ export type ScoreboardContext = {
 }
 
 export type PodiumContext = {
-
+  players: {
+    name: string;
+    position: number;
+    color: string | number[];
+    totalScore: number;
+    stat: string;
+  }[];
 }

@@ -14,8 +14,8 @@ import { convertScoresToScoreboards } from "@utils/conversions";
 import { createHTMLFile } from "@utils/file-generation";
 import { createHtmlScoreboard } from "@utils/html-generation";
 import { lambdaLaunchArgs } from "@utils/browser";
-import { CHRISTMAS_SCOREBOARD_TEMPLATE, DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates";
 import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from "@constants/svg-maps";
+import { DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/default-scoreboard";
 
 const fss = require('fs');
 const path = require('path');
@@ -45,6 +45,7 @@ export async function sendScoreboards() {
       }
     } else {
       try {
+        // TODO: Add check if last day of month to create podiums instead
         const scoreboards = convertScoresToScoreboards(scores);
 
         const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, DEFAULT_SCOREBOARD_TEMPLATE, DEFAULT_SVG_MAP), sb.chat_id)));
