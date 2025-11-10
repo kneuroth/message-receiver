@@ -39,8 +39,6 @@ export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [ke
   const daysInMonth = getDaysInMonth(new Date(yearMonth + '-01'));
   const maxScore = daysInMonth * 8;
 
-
-
   // Build position maps for today and yesterday (based on America/New_York)
   const todayEastern = toZonedTime(new Date(), 'America/New_York');
   const yesterdayEastern = subDays(todayEastern, 1);
@@ -51,19 +49,23 @@ export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [ke
   const scoreboardStart = new Date(`${yearMonth}-01`);
   const hasValidYesterday = yesterdayEastern >= scoreboardStart;
 
-  // Helper to compute total up to a given cutoff date (inclusive)
-  const totalUpTo = (scores: Record<string, number>, cutoffKey: string) => {
-    return Object.entries(scores).reduce((sum, [dateKey, val]) => {
-      // date keys are YYYY-MM-DD so string comparison works for ordering
-      return dateKey <= cutoffKey ? sum + val : sum;
-    }, 0);
-  };
+  // Map of total scores for each player
+  const totalScoresMap: { [playerId: number]: number } = {};
+  scoreboard.players.forEach(player => {
+    totalScoresMap[player.player_id] = Object.values(player.scores).reduce((a, b) => a + b, 0);
+  });
+
+  // Map of latest scores for each player
+  const latestScoresMap: { [playerId: number]: number } = {};
+  scoreboard.players.forEach(player => {
+    latestScoresMap[player.player_id] = player.scores[yesterdayKey] || 0;
+  });
 
   // Today's standings (total as of now) - ascending so lowest total -> rank 1
   const standingsToday = scoreboard.players.map(p => ({
     id: p.player_id,
     name: p.player_name,
-    total: Object.values(p.scores).reduce((a, b) => a + b, 0)
+    total: totalScoresMap[p.player_id]
   })).sort((a, b) => a.total - b.total);
 
   const positionMapToday: { [id: number]: number } = {};
@@ -75,24 +77,22 @@ export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [ke
     const standingsYesterday = scoreboard.players.map(p => ({
       id: p.player_id,
       name: p.player_name,
-      total: totalUpTo(p.scores, yesterdayKey)
+      total: totalScoresMap[p.player_id] - (latestScoresMap[p.player_id] || 0)
     })).sort((a, b) => a.total - b.total);
     standingsYesterday.forEach((entry, idx) => { positionMapYesterday[entry.id] = idx + 1 });
   }
 
-
   return {
     players: scoreboard.players
       .sort((playerA, playerB) => {
-        const aTotalScore = Object.values(playerA.scores).reduce((a, b) => a + b, 0);
-        const bTotalScore = Object.values(playerB.scores).reduce((a, b) => a + b, 0);
+        const aTotalScore = totalScoresMap[playerA.player_id];
+        const bTotalScore = totalScoresMap[playerB.player_id];
         // sort ascending so players[0] is the lowest scorer (position 1)
         return aTotalScore - bTotalScore;
       }).
       map(player => {
-        const totalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
-        const latestScore = player.scores[format(subDays(toZonedTime(new Date(), 'America/New_York'), 1), 'yyyy-MM-dd')] || 0;
-        const totalScoreYesterday = totalScore - latestScore;
+        const totalScore = totalScoresMap[player.player_id];
+        const latestScore = latestScoresMap[player.player_id] || 0;
 
         const positionToday = positionMapToday[player.player_id] || 0;
         const positionYesterday = hasValidYesterday ? positionMapYesterday[player.player_id] : undefined;
@@ -104,6 +104,8 @@ export function convertScoreboardToContext(scoreboard: Scoreboard, svgMap: { [ke
           else if (delta < 0) positionDelta = ARROW_DOWN_SVG;
           else positionDelta = null;
         }
+
+        console.log(`Player ${player.player_name} - Today: ${positionToday}, Yesterday: ${positionYesterday}, Delta: ${positionDelta}`);
 
         return {
           name: player.player_name,
