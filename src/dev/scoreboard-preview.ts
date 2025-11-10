@@ -19,7 +19,7 @@ async function main() {
         latestScore: 0,
         emoji: SVG_MAP[0],
         position: 1,
-        positionDelta: ARROW_DOWN_SVG,
+        positionDelta: ARROW_UP_SVG,
         scorePercentage: 20,
         color: "rgba(188, 20, 132, 1)",
         totalScore: 15
@@ -28,7 +28,7 @@ async function main() {
         name: "Mattios",
         latestScore: 1,
         emoji: SVG_MAP[1],
-        position: 1,
+        position: 2,
         positionDelta: ARROW_UP_SVG,
         scorePercentage: 45,
         color: "rgba(240, 191, 43, 1)",
@@ -38,8 +38,8 @@ async function main() {
         name: "Mattios",
         latestScore: 2,
         emoji: SVG_MAP[2],
-        position: 1,
-        positionDelta: null,
+        position: 3,
+        positionDelta: ARROW_DOWN_SVG,
         scorePercentage: 45,
         color: "rgba(240, 191, 43, 1)",
         totalScore: 22

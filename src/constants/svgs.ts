@@ -3,15 +3,64 @@
 
 export const ARROW_UP_SVG = `
 <img 
-  width="32" height="32" loading="lazy" decoding="async" alt="Up"
-  src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><defs><linearGradient id="gradUp" x1="0" y1="16" x2="0" y2="0"><stop offset="0" stop-color="%234f8e51"/><stop offset=".6" stop-color="%236AAA64"/><stop offset="1" stop-color="%238fcf90"/></linearGradient></defs><path d="M3 10l5-5 5 5" fill="none" stroke="%23000" stroke-opacity=".25" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 10l5-5 5 5" fill="none" stroke="url(%23gradUp)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' />
+  width="40" height="40" loading="lazy" decoding="async" alt="Up"
+  src='data:image/svg+xml;utf8,
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+      <linearGradient id="gradUp" x1="0" y1="16" x2="0" y2="0">
+        <stop offset="0" stop-color="%234f8e51"/>
+        <stop offset=".6" stop-color="%236AAA64"/>
+        <stop offset="1" stop-color="%238fcf90"/>
+      </linearGradient>
+    </defs>
+    <!-- stronger shadow -->
+    <path d="M3 10l5-5 5 5"
+          fill="none"
+          stroke="%23000"
+          stroke-opacity=".4"
+          stroke-width="3.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+    <!-- thicker arrow -->
+    <path d="M3 10l5-5 5 5"
+          fill="none"
+          stroke="url(%23gradUp)"
+          stroke-width="2.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </svg>' />
 `;
 
 export const ARROW_DOWN_SVG = `
 <img 
-  width="32" height="32" loading="lazy" decoding="async" alt="Down"
-  src='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><defs><linearGradient id="gradDown" x1="0" y1="0" x2="0" y2="16"><stop offset="0" stop-color="%23f36d6d"/><stop offset=".5" stop-color="%23C94A4A"/><stop offset="1" stop-color="%23993232"/></linearGradient></defs><path d="M3 6l5 5 5-5" fill="none" stroke="%23000" stroke-opacity=".25" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 6l5 5 5-5" fill="none" stroke="url(%23gradDown)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>' />
+  width="40" height="40" loading="lazy" decoding="async" alt="Down"
+  src='data:image/svg+xml;utf8,
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+      <linearGradient id="gradDown" x1="0" y1="0" x2="0" y2="16">
+        <stop offset="0" stop-color="%23f36d6d"/>
+        <stop offset=".5" stop-color="%23C94A4A"/>
+        <stop offset="1" stop-color="%23993232"/>
+      </linearGradient>
+    </defs>
+    <!-- stronger shadow -->
+    <path d="M3 6l5 5 5-5"
+          fill="none"
+          stroke="%23000"
+          stroke-opacity=".4"
+          stroke-width="3.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+    <!-- thicker arrow -->
+    <path d="M3 6l5 5 5-5"
+          fill="none"
+          stroke="url(%23gradDown)"
+          stroke-width="2.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+  </svg>' />
 `;
+
 
 export const CRY_FACE_SVG = `
 <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f62b.svg"
