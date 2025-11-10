@@ -107,6 +107,11 @@ export const DEFAULT_SCOREBOARD_TEMPLATE = `
     align-items: center;
   }
 
+  .position {
+    display: flex;
+    align-items: center;
+  }
+
   .score-section {
     height: 4rem;
     display: flex;
@@ -134,6 +139,10 @@ export const DEFAULT_SCOREBOARD_TEMPLATE = `
     {{#each players}}
       <div class='player-entry'>
         <div class='player-details'>
+          <div class='position'>
+            <h2>{{& position  }}</h2>
+            {{& positionDelta }}
+          </div>
           <h3 class='name'>{{name}}</h3>
           <div class='score-section'>
             <p>+{{latestScore}}</p> 

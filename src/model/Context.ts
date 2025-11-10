@@ -3,6 +3,8 @@ export type ScoreboardContext = {
     name: string;
     latestScore: number;
     emoji: string;
+    position: number;
+    positionDelta: string | null;
     scorePercentage: number;
     color: string | number[];
     totalScore: number;
