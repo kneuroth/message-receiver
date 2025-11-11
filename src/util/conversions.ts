@@ -8,7 +8,7 @@ import { Podium } from "@model/Podium";
 import { generateStatForPlayer } from "./stats";
 import { ARROW_DOWN_SVG, ARROW_UP_SVG } from "@constants/svgs";
 
-export function convertPodiumToContext(podium: Podium): PodiumContext {
+export function convertPodiumToContext(podium: Podium, svgMap: { [key: number]: string }): PodiumContext {
 
   return {
     players: podium.players
@@ -20,10 +20,12 @@ export function convertPodiumToContext(podium: Podium): PodiumContext {
       }).
       map((player, index) => {
         const totalScore = Object.values(player.scores).reduce((a, b) => a + b, 0);
+        const position = index + 1;
         return {
           name: player.player_name,
-          position: index + 1,
+          position: position,
           color: hashColor(player.player_id, podium.chat_id),
+          emoji: svgMap[position] || '',
           totalScore: totalScore,
           stat: player.stat || ''
         }

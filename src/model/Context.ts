@@ -14,6 +14,7 @@ export type ScoreboardContext = {
 export type PodiumContext = {
   players: {
     name: string;
+    emoji?: string;
     position: number;
     color: string | number[];
     totalScore: number;

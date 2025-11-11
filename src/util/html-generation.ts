@@ -3,9 +3,9 @@ import { convertPodiumToContext, convertScoreboardToContext } from "./conversion
 import Handlebars from "handlebars";
 import { Podium } from "@model/Podium";
 
-export function createHtmlPodium(podium: Podium, template: string): string {
+export function createHtmlPodium(podium: Podium, template: string, svgMap: { [key: number]: string }): string {
   const templateDelegate = Handlebars.compile(template);
-  const context = convertPodiumToContext(podium);
+  const context = convertPodiumToContext(podium, svgMap);
   return templateDelegate(context);
 }
 

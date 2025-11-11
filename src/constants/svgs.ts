@@ -138,3 +138,8 @@ export const ROCK_SVG = `<img
   src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1faa8.svg"
   alt="rock" width="32" height="32" loading="lazy" decoding="async">
 `;
+
+export const POPPER_SVG = `<img
+  src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f389.svg"
+  alt="party popper" width="32" height="32" loading="lazy" decoding="async">
+`;

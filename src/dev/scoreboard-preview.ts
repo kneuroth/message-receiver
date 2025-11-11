@@ -1,6 +1,6 @@
 import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/christmas-scoreboard";
 import { DEFAULT_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/default-scoreboard";
-import { CHRISTMAS_SVG_MAP, DEFAULT_SVG_MAP } from "../constants/svg-maps";
+import { CHRISTMAS_SVG_SCORE_MAP, DEFAULT_SVG_SCORE_MAP } from "../constants/svg-maps";
 import { ScoreboardContext } from "@model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
@@ -8,14 +8,14 @@ import { ARROW_DOWN_SVG, ARROW_UP_SVG } from "../constants/svgs";
 
 async function main() {
 
-  const SVG_MAP = CHRISTMAS_SVG_MAP;
+  const SVG_MAP = CHRISTMAS_SVG_SCORE_MAP;
   const TEMPLATE = DEFAULT_SCOREBOARD_TEMPLATE;
 
   const scoreboardContext: ScoreboardContext = {
     players: [
 
       {
-        name: "Chapporieoes",
+        name: "Maggie",
         latestScore: 0,
         emoji: SVG_MAP[0],
         position: 1,
@@ -25,27 +25,27 @@ async function main() {
         totalScore: 15
       },
       {
-        name: "Mattios",
+        name: "Matt",
         latestScore: 1,
         emoji: SVG_MAP[1],
         position: 2,
         positionDelta: ARROW_UP_SVG,
         scorePercentage: 45,
-        color: "rgba(240, 191, 43, 1)",
+        color: "rgba(8, 190, 63, 1)",
         totalScore: 22
       },
       {
-        name: "Mattios",
+        name: "Chep",
         latestScore: 2,
         emoji: SVG_MAP[2],
         position: 3,
         positionDelta: ARROW_DOWN_SVG,
         scorePercentage: 45,
-        color: "rgba(240, 191, 43, 1)",
+        color: "rgba(213, 103, 40, 1)",
         totalScore: 22
       },
       {
-        name: "Mattios",
+        name: "Kelly",
         latestScore: 3,
         emoji: SVG_MAP[3],
         position: 1,
@@ -55,17 +55,17 @@ async function main() {
         totalScore: 22
       },
       {
-        name: "Geofferey",
+        name: "Anika",
         latestScore: 4,
         emoji: SVG_MAP[4],
         position: 1,
         positionDelta: null,
         scorePercentage: 66,
-        color: "rgba(42, 188, 20, 1)",
+        color: "rgba(207, 51, 137, 1)",
         totalScore: 33
       },
       {
-        name: "Kelly",
+        name: "Emily",
         latestScore: 5,
         emoji: SVG_MAP[5],
         position: 1,
@@ -75,23 +75,23 @@ async function main() {
         totalScore: 44
       },
       {
-        name: "Kelly",
+        name: "Heather",
         latestScore: 6,
         emoji: SVG_MAP[6],
         position: 1,
         positionDelta: null,
         scorePercentage: 77,
-        color: "rgba(0, 65, 149, 1)",
+        color: "rgba(80, 183, 16, 1)",
         totalScore: 44
       },
       {
-        name: "Kelly",
+        name: "Sean",
         latestScore: 7,
         emoji: SVG_MAP[7],
         position: 1,
         positionDelta: null,
         scorePercentage: 77,
-        color: "rgba(0, 65, 149, 1)",
+        color: "rgba(25, 204, 147, 1)",
         totalScore: 44
       },
       {
@@ -108,7 +108,7 @@ async function main() {
   }
   const template = Handlebars.compile(TEMPLATE)
   const html = template(scoreboardContext);
-  await fs.writeFile("preview.html", html);
+  await fs.writeFile("scoreboard-preview.html", html);
   console.log("✅ Wrote preview.html — open it in a browser");
 }
 

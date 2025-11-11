@@ -2,82 +2,75 @@ import { DEFAULT_PODIUM_TEMPLATE } from "../constants/templates/podiums/default-
 import { PodiumContext } from "../../src/model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
+import { DEFAULT_PODIUM_SVG_MAP } from "../constants/svg-maps";
 
 async function main() {
 
+  const SVG_MAP = DEFAULT_PODIUM_SVG_MAP;
   const TEMPLATE = DEFAULT_PODIUM_TEMPLATE;
 
   const podiumContext: PodiumContext = {
     players: [
 
       {
-        name: "Chapporieoes",
+        name: "Chep",
         color: "rgba(188, 20, 132, 1)",
         totalScore: 15,
         position: 1,
+        emoji: SVG_MAP[1],
         stat: ""
       },
+
       {
-        name: "Mattios",
-        color: "rgba(240, 191, 43, 1)",
+        name: "Anika",
+        color: "rgba(56, 240, 43, 1)",
         totalScore: 22,
         position: 2,
+        emoji: SVG_MAP[2],
         stat: ""
       },
       {
-        name: "Mattios",
+        name: "Maggie",
         color: "rgba(240, 191, 43, 1)",
-        totalScore: 22,
+        totalScore: 25,
         position: 3,
+        emoji: SVG_MAP[3],
         stat: ""
       },
       {
-        name: "Mattios",
-        color: "rgba(240, 191, 43, 1)",
-        totalScore: 22,
+        name: "Matt",
+        color: "rgba(208, 72, 41, 1)",
+        totalScore: 28,
         position: 4,
+        emoji: SVG_MAP[4],
         stat: ""
       },
       {
-        name: "Geofferey",
-        color: "rgba(42, 188, 20, 1)",
+        name: "Ally",
+        color: "rgba(36, 26, 225, 1)",
         totalScore: 33,
         position: 5,
         stat: ""
       },
       {
-        name: "Kelly",
-        color: "rgba(0, 65, 149, 1)",
+        name: "Sean",
+        color: "rgba(37, 214, 173, 1)",
         totalScore: 44,
         position: 6,
         stat: ""
       },
       {
-        name: "Kelly",
-        color: "rgba(0, 65, 149, 1)",
+        name: "Erin",
+        color: "rgba(202, 244, 51, 1)",
         totalScore: 44,
         position: 7,
-        stat: ""
-      },
-      {
-        name: "Kelly",
-        color: "rgba(0, 65, 149, 1)",
-        totalScore: 44,
-        position: 8,
-        stat: ""
-      },
-      {
-        name: "Kelly",
-        color: "rgba(0, 65, 149, 1)",
-        totalScore: 44,
-        position: 9,
         stat: ""
       },
     ]
   }
   const template = Handlebars.compile(TEMPLATE)
   const html = template(podiumContext);
-  await fs.writeFile("preview.html", html);
+  await fs.writeFile("podium-preview.html", html);
   console.log("✅ Wrote preview.html — open it in a browser");
 }
 
