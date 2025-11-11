@@ -10,12 +10,13 @@ import axios from "axios";
 import FormData from "form-data";
 import chromium from "@sparticuz/chromium";
 import puppeteer from "puppeteer-core";
-import { convertScoresToScoreboards } from "@utils/conversions";
-import { createHTMLFile } from "@utils/file-generation";
-import { createHtmlScoreboard } from "@utils/html-generation";
+import { convertScoreboardsToPoduims, convertScoresToScoreboards } from "@utils/conversions";
+import { createHTMLFile, HTMLCreationResult } from "@utils/file-generation";
+import { createHtmlPodium, createHtmlScoreboard } from "@utils/html-generation";
 import { lambdaLaunchArgs } from "@utils/browser";
-import { CHRISTMAS_SVG_SCORE_MAP, DEFAULT_SVG_SCORE_MAP } from "@constants/svg-maps";
+import { CHRISTMAS_SVG_SCORE_MAP, DEFAULT_PODIUM_SVG_MAP, DEFAULT_SVG_SCORE_MAP } from "@constants/svg-maps";
 import { DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/default-scoreboard";
+import { DEFAULT_PODIUM_TEMPLATE } from "@constants/templates/podiums/default-podium";
 
 const fss = require('fs');
 const path = require('path');
@@ -45,10 +46,15 @@ export async function sendScoreboards() {
       }
     } else {
       try {
-        // TODO: Add check if last day of month to create podiums instead
         const scoreboards = convertScoresToScoreboards(scores);
-
-        const pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, DEFAULT_SCOREBOARD_TEMPLATE, DEFAULT_SVG_SCORE_MAP), sb.chat_id)));
+        let pathResults: HTMLCreationResult[] = [];
+        // If start of month, generate podiums instead
+        if (easternToday.getDate() === 1) {
+          const podiums = convertScoreboardsToPoduims(scoreboards);
+          pathResults = await Promise.all(podiums.map(pd => createHTMLFile(createHtmlPodium(pd, DEFAULT_PODIUM_TEMPLATE, DEFAULT_PODIUM_SVG_MAP), pd.chat_id)));
+        } else {
+          pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, DEFAULT_SCOREBOARD_TEMPLATE, DEFAULT_SVG_SCORE_MAP), sb.chat_id)));
+        }
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 
         let browser: any | undefined;

@@ -70,7 +70,7 @@ export const DEFAULT_PODIUM_TEMPLATE = `
   }
 
   .podium-pos {
-    font-size: 16px;
+    font-size: 28px;
     font-weight: 800;
     opacity: 0.95;
     margin-bottom: 8px;
@@ -187,7 +187,6 @@ export const DEFAULT_PODIUM_TEMPLATE = `
               {{&emoji }}
             </div>
             <div class="podium-score">{{totalScore}}</div>
-            {{#if stat}}<div class="podium-badge">{{stat}}</div>{{/if}}
           </div>
         </div>
       {{/with}}
@@ -202,7 +201,6 @@ export const DEFAULT_PODIUM_TEMPLATE = `
               {{&emoji }}
             </div>
             <div class="podium-score">{{totalScore}}</div>
-            {{#if stat}}<div class="podium-badge">{{stat}}</div>{{/if}}
           </div>
         </div>
       {{/with}}
@@ -217,7 +215,6 @@ export const DEFAULT_PODIUM_TEMPLATE = `
               {{&emoji }}
             </div>
             <div class="podium-score">{{totalScore}}</div>
-            {{#if stat}}<div class="podium-badge">{{stat}}</div>{{/if}}
           </div>
         </div>
       {{/with}}
@@ -229,8 +226,8 @@ export const DEFAULT_PODIUM_TEMPLATE = `
           <tr style="background-color: {{color}}; box-shadow: 0 0 10px {{color}};">
             <td class="position">{{position}}</td>
             <td class="name">{{name}}</td>
-            <td class="score">{{totalScore}}</td>
             <td class="stat">{{stat}}</td>
+            <td class="score">{{totalScore}}</td>
           </tr>
         {{/each}}
       </tbody>
