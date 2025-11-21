@@ -23,7 +23,7 @@ This serverless application handles incoming messages from Telegram and records 
 - Run `serverless deploy` to deploy to dev
 - Run `serverless dev` to run locally
 - Run `serverless --stage production` to deploy to production evironment
-- Be sure to update .env and serverless.yml as needed
+- Be sure to update serverless.yml as needed
 
 - Use drizzle-kit cli tool to make changes to data schema
 - Run `npx tsx drizzle/seed.ts` to seed database with dummy data
