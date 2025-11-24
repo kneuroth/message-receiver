@@ -2,12 +2,13 @@ import { DEFAULT_PODIUM_TEMPLATE } from "../constants/templates/podiums/default-
 import { PodiumContext } from "../../src/model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
-import { DEFAULT_PODIUM_SVG_MAP } from "../constants/svg-maps";
+import { CHRISTMAS_PODIUM_SVG_MAP, DEFAULT_PODIUM_SVG_MAP } from "../constants/svg-maps";
+import { CHRISTMAS_PODIUM_TEMPLATE } from "../constants/templates/podiums/christmas-podium";
 
 async function main() {
 
-  const SVG_MAP = DEFAULT_PODIUM_SVG_MAP;
-  const TEMPLATE = DEFAULT_PODIUM_TEMPLATE;
+  const SVG_MAP = CHRISTMAS_PODIUM_SVG_MAP;
+  const TEMPLATE = CHRISTMAS_PODIUM_TEMPLATE;
 
   const podiumContext: PodiumContext = {
     players: [
@@ -42,7 +43,6 @@ async function main() {
         color: "rgba(208, 72, 41, 1)",
         totalScore: 28,
         position: 4,
-        emoji: SVG_MAP[4],
         stat: ""
       },
       {

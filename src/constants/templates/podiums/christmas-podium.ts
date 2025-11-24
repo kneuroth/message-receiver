@@ -1,0 +1,214 @@
+export const CHRISTMAS_PODIUM_TEMPLATE = `
+<style>
+  /* Christmas theme (inspired by CHRISTMAS_SCOREBOARD_TEMPLATE) */
+  :root {
+    --snow: #eef6ff;
+    --evergreen: #0f5132;
+    --holly: #b91c1c;
+    --gold-dark: #ae8625;
+    --gold: #d2ac47;
+    --gold-light: #f7ef8a;
+    --silver-dark: #606264ff;
+    --silver: #787c7e;
+    --silver-light: #a8aaad;
+    --bronze-dark: #8c5a32;
+    --bronze: #a56a46;
+    --bronze-light: #d99c6c;
+    --panel-deep: #0e241a;
+    --panel-mid: #10281e;
+    --panel-top: #143526;
+    --char: #0b0c0d;
+    --glass: #ffffff1a;
+    --soft-shadow: rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  
+
+  body {
+    font-family: ui-serif, Georgia, 'Times New Roman', serif;
+    font-size: 26px;
+    color: var(--snow);
+    background:
+      radial-gradient(1500px 800px at 50% -200px, #173a2b 0%, #0d1f16 40%, #0a1510 100%),
+      linear-gradient(#0b1a13, #0b1a13);
+    width: 1200px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    border: 1px solid #295c43;
+    box-shadow: 0 8px 24px #0009, inset 0 0 0 1px #0008;
+    background: linear-gradient(180deg, var(--panel-top), var(--panel-mid) 60%, var(--panel-deep));
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .podium-wrap {
+    display: flex;
+    gap: 18px;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+
+  .podium-col { width: 300px; display:flex; flex-direction:column; align-items:center; }
+
+  .podium-block {
+    width: 100%;
+    border-radius: 16px;
+    padding: 18px 16px;
+    box-sizing: border-box;
+    text-align: center;
+    color: var(--snow);
+    border: 1px solid rgba(0,0,0,0.35);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.12));
+  }
+
+  .podium-pos { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+  .podium-name { font-size: 22px; font-weight: 900; margin: 6px 0; }
+  .podium-score { font-size: 20px; font-weight: 800; }
+
+  /* 1st place - gold ornament look */
+  .col-1 .podium-block {
+    height: 320px;
+    background: linear-gradient(180deg, var(--gold-light) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    color: #2b2b2b;
+    border: 1px solid rgba(212,175,55,0.7);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.6), 0 0 14px rgba(212,175,55,0.12) inset;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 2nd place - evergreen ornament */
+  .col-2 .podium-block {
+    height: 240px;
+    background: linear-gradient(180deg, var(--silver-light) 0%, var(--silver) 50%, var(--silver-dark) 100%);
+    border: 1px solid #0f5132;
+    box-shadow: 0 10px 22px rgba(0,0,0,0.6);
+  }
+
+  /* 3rd place - silver/brass ornament */
+  .col-3 .podium-block {
+    height: 200px;
+    background: linear-gradient(180deg, var(--bronze-light) 0%, var(--bronze) 50%, var(--bronze-dark) 100%);
+    border: 1px solid rgba(192,199,209,0.6);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.55);
+  }
+
+  .podium-badge { display:inline-block; margin-top:12px; font-size:14px; padding:6px 10px; border-radius:999px; background: var(--glass); }
+
+  /* bottom scoreboard rows styled like ornaments */
+  .table { width: 100%; border-collapse: separate; margin-top: 6px; }
+  .table tbody { display: flex; flex-direction: column; gap: 10px; }
+  .table tr { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; position: relative; }
+
+  .ornament-row {
+    position: relative;
+    background: linear-gradient(to top, rgba(0,0,0,0.06), var(--player-color, rgba(0,0,0,0.04)));
+    border: 1px solid rgba(0,0,0,0.12);
+    border-bottom: none;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.36);
+    overflow: visible;
+  }
+
+  /* subtle decorative snowflakes placed behind the podium content */
+  .snowflake {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.12;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45));
+    stroke: var(--snow);
+    fill: none;
+    transform-origin: center;
+  }
+  .snowflake-1 { top: 28px; left: 36px; width: 120px; height: 120px; transform: rotate(8deg); }
+  .snowflake-2 { top: 72px; right: 44px; width: 80px; height: 80px; transform: rotate(-12deg); opacity: 0.09; }
+
+  /* keep the text/content above decorative layers */
+  .table td { padding: 0 12px; position: relative; z-index: 1; }
+  .table td.position { width: 64px; font-weight:900; }
+  .table td.name { flex: 1; font-weight:800; }
+  .table td.score { width: 120px; font-weight:900; text-align:right; }
+
+  @media (max-width: 1200px) { .container { width:100%; padding:16px } }
+</style>
+<body>
+  <!-- decorative inline SVG snowflakes -->
+  <svg class="snowflake snowflake-1" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 2v20M2 12h20M4.2 4.2l15.6 15.6M19.8 4.2L4.2 19.8" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M12 6l0 4M12 14l0 4M6 12l4 0M14 12l4 0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <svg class="snowflake snowflake-2" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M12 2v20M2 12h20M4.2 4.2l15.6 15.6M19.8 4.2L4.2 19.8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+
+  <div class="container">
+    <div class="podium-wrap">
+      {{#with players.[1]}}
+        <div class="podium-col col-2">
+          <div class="podium-pos">2</div>
+          <div class="podium-block">
+            <div class="podium-name">
+              {{&emoji }} 
+              {{name}} 
+              {{&emoji }}
+            </div>
+            <div class="podium-score">{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+
+      {{#with players.[0]}}
+        <div class="podium-col col-1">
+          <div class="podium-pos">1</div>
+          <div class="podium-block">
+            <div class="podium-name">
+              {{&emoji }} 
+              {{name}} 
+              {{&emoji }}
+            </div>
+            <div class="podium-score">{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+ 
+      {{#with players.[2]}}
+        <div class="podium-col col-3">
+          <div class="podium-pos">3</div>
+          <div class="podium-block">
+            <div class="podium-name">
+              {{&emoji }} 
+              {{name}} 
+              {{&emoji }}
+            </div>
+            <div class="podium-score">{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+    </div>
+
+    <table class="table" role="table">
+      <tbody>
+        {{#each players}}
+          <tr class="ornament-row" style="--player-color: {{color}};">
+            <td class="position">{{position}}</td>
+            <td class="name">{{name}}</td>
+            <td class="stat">{{stat}}</td>
+            <td class="score">{{totalScore}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+<body>
+
+`;

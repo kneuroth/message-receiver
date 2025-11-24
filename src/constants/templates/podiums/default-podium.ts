@@ -7,7 +7,15 @@ export const DEFAULT_PODIUM_TEMPLATE = `
     --bg: #121213;
     --panel: #3a3a3c;
     --muted: #8584848f;
-    --gold: #b59f3b;
+    --gold-dark: #ae8625;
+    --gold: #d2ac47;
+    --gold-light: #f7ef8a;
+    --silver-dark: #606264ff;
+    --silver: #787c7e;
+    --silver-light: #a8aaad;
+    --bronze-dark: #8c5a32;
+    --bronze: #a56a46;
+    --bronze-light: #d99c6c;
     --green: #538d4e;
     --muted-gold: #b59f3bce;
     --text: #f8f8f8;
@@ -91,26 +99,22 @@ export const DEFAULT_PODIUM_TEMPLATE = `
   /* Specific heights and color accents for 1/2/3 */
   .col-1 .podium-block {
     height: 300px;
-    background: var(--green);
-
-    background: var(--green);
-    background-color: var(--green);
-    box-shadow: 0 0 10px var(--green);
-    border: 1px solid var(--green);
-  }
-
-  .col-2 .podium-block {
-    height: 220px;
-    background: var(--gold);
-    background-color: var(--gold);
+    background: linear-gradient(to top, var(--gold-dark), var(--gold-light), var(--gold), var(--gold-dark), var(--gold));
     box-shadow: 0 0 10px var(--gold);
     border: 1px solid var(--gold);
   }
 
+  .col-2 .podium-block {
+    height: 220px;
+    background: linear-gradient(to top, var(--silver-dark), var(--silver-light), var(--silver));
+    box-shadow: 0 0 10px var(--silver);
+    border: 1px solid var(--silver);
+  }
+
   .col-3 .podium-block {
     height: 180px;
-    background: var(--muted-gold);
-    box-shadow: 0 0 10px var(--muted-gold);
+    background: linear-gradient(to top, var(--bronze-dark), var(--bronze-light), var(--bronze));
+    box-shadow: 0 0 10px var(--bronze);
   }
 
   .podium-badge {

@@ -1,5 +1,22 @@
 export const DEFAULT_SCOREBOARD_TEMPLATE = `
 <style>
+  /* ----------------------------------
+		 Theme variables
+		 ---------------------------------- */
+  :root {
+    --bg: #121213;
+    --panel: #3a3a3c;
+    --muted: #8584848f;
+    --gold: #b59f3b;
+    --silver: #787c7e;
+    --bronze: #a56a46;
+    --green: #538d4e;
+    --muted-gold: #b59f3bce;
+    --text: #f8f8f8;
+    --border: #78787d;
+    --soft-shadow: rgba(136, 136, 144, 0.12);
+  }
+    
   body {
     font-family: sans-serif;
     font-size: 26px;
