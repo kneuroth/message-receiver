@@ -9,7 +9,7 @@ import { ARROW_DOWN_SVG, ARROW_UP_SVG } from "../constants/svgs";
 async function main() {
 
   const SVG_MAP = CHRISTMAS_SVG_SCORE_MAP;
-  const TEMPLATE = DEFAULT_SCOREBOARD_TEMPLATE;
+  const TEMPLATE = CHRISTMAS_SCOREBOARD_TEMPLATE;
 
   const scoreboardContext: ScoreboardContext = {
     players: [
@@ -48,7 +48,7 @@ async function main() {
         name: "Kelly",
         latestScore: 3,
         emoji: SVG_MAP[3],
-        position: 1,
+        position: 4,
         positionDelta: null,
         scorePercentage: 45,
         color: "rgba(240, 191, 43, 1)",
@@ -58,7 +58,7 @@ async function main() {
         name: "Anika",
         latestScore: 4,
         emoji: SVG_MAP[4],
-        position: 1,
+        position: 5,
         positionDelta: null,
         scorePercentage: 66,
         color: "rgba(207, 51, 137, 1)",

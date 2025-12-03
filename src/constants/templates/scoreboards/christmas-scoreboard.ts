@@ -102,6 +102,12 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
     font-weight: 700;
   }
 
+  .position {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
   /* candy-cane progress bar frame */
   .progress-bar {
     height: 3.25rem;
@@ -164,6 +170,10 @@ export const CHRISTMAS_SCOREBOARD_TEMPLATE = `
     {{#each players}}
       <div class='player-entry'>
         <div class='player-details'>
+        <div class='position'>
+            <h2>{{& position  }}</h2>
+            {{& positionDelta }}
+          </div>
           <h3 class='name'>{{name}}</h3>
           <div class='score-section'>
             <p>+{{latestScore}}</p>

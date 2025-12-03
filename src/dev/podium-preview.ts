@@ -7,8 +7,8 @@ import { CHRISTMAS_PODIUM_TEMPLATE } from "../constants/templates/podiums/christ
 
 async function main() {
 
-  const SVG_MAP = CHRISTMAS_PODIUM_SVG_MAP;
-  const TEMPLATE = CHRISTMAS_PODIUM_TEMPLATE;
+  const SVG_MAP = DEFAULT_PODIUM_SVG_MAP;
+  const TEMPLATE = DEFAULT_PODIUM_TEMPLATE;
 
   const podiumContext: PodiumContext = {
     players: [
