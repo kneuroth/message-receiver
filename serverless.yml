@@ -10,8 +10,8 @@ provider:
   name: aws
   runtime: nodejs20.x
   environment:
-    DATABASE_URL: 'postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-withered-scene-ae767gyy-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-    BOT_TOKEN: '8195866237:AAHcxKujhxXd0pexg05ZphZ-2qtO6g4hxPc'
+    DATABASE_URL: '' # postgres url
+    BOT_TOKEN: '' # excllude 'bot' part
   httpApi:
     cors:
       allowedOrigins:
