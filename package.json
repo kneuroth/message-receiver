@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build:scoreboard": "npx nodemon ./src/dev/scoreboard-preview.ts",
-    "build:podium": "npx nodemon ./src/dev/podium-preview.ts"
+    "templates:compile": "ts-node scripts/build-templates.ts",
+    "templates:watch": "nodemon --watch src/constants/templates --ext hbs --exec \"npm run templates:compile\"",
+    "dev:scoreboard": "npm run templates:compile && concurrently \"npm run templates:watch\" \"npx nodemon ./src/dev/scoreboard-preview.ts\"",
+    "dev:podium": "npm run templates:compile && concurrently \"npm run templates:watch\" \"npx nodemon ./src/dev/podium-preview.ts\""
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",

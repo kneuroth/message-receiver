@@ -5,11 +5,13 @@ import { ScoreboardContext } from "@model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 import { ARROW_DOWN_SVG, ARROW_UP_SVG } from "../constants/svgs";
+import { MATRIX_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/matrix-scoreboard";
+import { MATRIX_SCOREBOARD_AI_TEMPLATE } from "../constants/templates/scoreboards/matrix-scoreboard-ai";
 
 async function main() {
 
   const SVG_MAP = CHRISTMAS_SVG_SCORE_MAP;
-  const TEMPLATE = CHRISTMAS_SCOREBOARD_TEMPLATE;
+  const TEMPLATE = MATRIX_SCOREBOARD_TEMPLATE;
 
   const scoreboardContext: ScoreboardContext = {
     players: [

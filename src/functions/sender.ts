@@ -19,6 +19,7 @@ import { DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/de
 import { DEFAULT_PODIUM_TEMPLATE } from "@constants/templates/podiums/default-podium";
 import { CHRISTMAS_PODIUM_TEMPLATE } from "@constants/templates/podiums/christmas-podium";
 import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/christmas-scoreboard";
+import { MATRIX_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/matrix-scoreboard";
 
 const fss = require('fs');
 const path = require('path');
@@ -55,7 +56,7 @@ export async function sendScoreboards() {
           const podiums = convertScoreboardsToPoduims(scoreboards);
           pathResults = await Promise.all(podiums.map(pd => createHTMLFile(createHtmlPodium(pd, CHRISTMAS_PODIUM_TEMPLATE, CHRISTMAS_PODIUM_SVG_MAP), pd.chat_id)));
         } else {
-          pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, CHRISTMAS_SCOREBOARD_TEMPLATE, CHRISTMAS_SVG_SCORE_MAP), sb.chat_id)));
+          pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, MATRIX_SCOREBOARD_TEMPLATE, DEFAULT_SVG_SCORE_MAP), sb.chat_id)));
         }
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 

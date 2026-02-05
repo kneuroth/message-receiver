@@ -10,7 +10,7 @@ provider:
   name: aws
   runtime: nodejs20.x
   environment:
-    DATABASE_URL: postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-silent-pine-aenqt4db-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+    DATABASE_URL: 'postgresql://neondb_owner:npg_oPIN5CyJmdg6@ep-withered-scene-ae767gyy-pooler.c-2.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
     BOT_TOKEN: '8195866237:AAHcxKujhxXd0pexg05ZphZ-2qtO6g4hxPc'
   httpApi:
     cors:
@@ -31,7 +31,7 @@ functions:
     timeout: 300 # 5 minutes
     memorySize: 3008 # 3 GB
     events:
-      - schedule: cron(0 4 * * ? *)
+      - schedule: cron(0 5 * * ? *)
     layers:
       - arn:aws:lambda:us-east-1:960010173416:layer:chromiumBinaries:1
 
