@@ -1,25 +1,22 @@
+import { MATRIX_PNG_SCORE_MAP } from "@constants/png-maps";
+import { CHRISTMAS_PODIUM_SVG_MAP } from "@constants/svg-maps";
+import { CHRISTMAS_PODIUM_TEMPLATE } from "@constants/templates/podiums/christmas-podium";
+import { MATRIX_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/matrix-scoreboard";
 import { neon } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
-import { scoreTable } from "../db/schema";
-import fs from 'fs/promises';
-import os from 'os';
-import { between } from "drizzle-orm";
-import { toZonedTime } from "date-fns-tz";
-import { format, startOfDay, startOfMonth, subDays } from "date-fns";
-import axios from "axios";
-import FormData from "form-data";
-import chromium from "@sparticuz/chromium";
-import puppeteer from "puppeteer-core";
+import { lambdaLaunchArgs } from "@utils/browser";
 import { convertScoreboardsToPoduims, convertScoresToScoreboards } from "@utils/conversions";
 import { createHTMLFile, HTMLCreationResult } from "@utils/file-generation";
 import { createHtmlPodium, createHtmlScoreboard } from "@utils/html-generation";
-import { lambdaLaunchArgs } from "@utils/browser";
-import { CHRISTMAS_PODIUM_SVG_MAP, CHRISTMAS_SVG_SCORE_MAP, DEFAULT_PODIUM_SVG_MAP, DEFAULT_SVG_SCORE_MAP } from "@constants/svg-maps";
-import { DEFAULT_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/default-scoreboard";
-import { DEFAULT_PODIUM_TEMPLATE } from "@constants/templates/podiums/default-podium";
-import { CHRISTMAS_PODIUM_TEMPLATE } from "@constants/templates/podiums/christmas-podium";
-import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/christmas-scoreboard";
-import { MATRIX_SCOREBOARD_TEMPLATE } from "@constants/templates/scoreboards/matrix-scoreboard";
+import axios from "axios";
+import { format, startOfDay, startOfMonth, subDays } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import { between } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/neon-http";
+import FormData from "form-data";
+import fs from 'fs/promises';
+import os from 'os';
+import puppeteer from "puppeteer-core";
+import { scoreTable } from "../db/schema";
 
 const fss = require('fs');
 const path = require('path');
@@ -56,7 +53,7 @@ export async function sendScoreboards() {
           const podiums = convertScoreboardsToPoduims(scoreboards);
           pathResults = await Promise.all(podiums.map(pd => createHTMLFile(createHtmlPodium(pd, CHRISTMAS_PODIUM_TEMPLATE, CHRISTMAS_PODIUM_SVG_MAP), pd.chat_id)));
         } else {
-          pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, MATRIX_SCOREBOARD_TEMPLATE, DEFAULT_SVG_SCORE_MAP), sb.chat_id)));
+          pathResults = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, MATRIX_SCOREBOARD_TEMPLATE, MATRIX_PNG_SCORE_MAP), sb.chat_id)));
         }
         const BOT_TOKEN = process.env.BOT_TOKEN!;
 

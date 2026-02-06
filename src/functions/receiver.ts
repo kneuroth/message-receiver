@@ -1,12 +1,12 @@
 
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { neon } from '@neondatabase/serverless'
-import { drizzle } from 'drizzle-orm/neon-http'
-import { isValidScoreForToday } from '@utils/validation';
 import { scoreTable } from '@db/schema';
 import { updateSchema } from '@model/Update';
-import { toZonedTime } from 'date-fns-tz';
+import { neon } from '@neondatabase/serverless';
+import { isValidScoreForToday } from '@utils/validation';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { format } from 'date-fns';
+import { toZonedTime } from 'date-fns-tz';
+import { drizzle } from 'drizzle-orm/neon-http';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);

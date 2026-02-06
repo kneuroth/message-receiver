@@ -60,7 +60,6 @@ export const MATRIX_SCOREBOARD_TEMPLATE = `<style>
     height: 3rem;
     width: 60%;
     background-color: var(--bg);
-
     display: flex;
     align-items: center;
     padding: 0 0.75rem;

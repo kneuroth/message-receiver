@@ -5,13 +5,14 @@ app: wordle-league
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: message-receiver
 configValidationMode: error
+useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs20.x
   environment:
-    DATABASE_URL: '' # postgres url
-    BOT_TOKEN: '' # excllude 'bot' part
+    DATABASE_URL: ${env:DATABASE_URL}
+    BOT_TOKEN: ${env:BOT_TOKEN}
   httpApi:
     cors:
       allowedOrigins:

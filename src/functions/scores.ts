@@ -1,11 +1,11 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { createInsertSchema } from 'drizzle-zod'
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import { createInsertSchema } from 'drizzle-zod';
 
-import { neon } from '@neondatabase/serverless'
-import { drizzle } from 'drizzle-orm/neon-http';
-import { and, eq } from 'drizzle-orm'
-import z from 'zod/v4';
 import { scoreTable } from '@db/schema';
+import { neon } from '@neondatabase/serverless';
+import { and, eq } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/neon-http';
+import z from 'zod/v4';
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);

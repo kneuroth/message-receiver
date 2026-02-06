@@ -24,10 +24,11 @@ src/
 │   ├── Score.ts, Scoreboard.ts, Podium.ts, Update.ts, Context.ts
 ├── db/            # Drizzle schema
 ├── util/          # Utilities (browser, html-generation, etc.)
-├── constants/     # SVGs, templates
+├── constants/     # SVGs, templates, icons
 │   └── templates/
 │       ├── scoreboards/  # Scoreboard HTML templates
-│       └── podiums/      # Podium HTML templates
+│       ├── podiums/      # Podium HTML templates
+│       └── icons/        # PNG emoji icons (must be square)
 └── dev/           # Local preview scripts
 ```
 
@@ -40,12 +41,14 @@ src/
 
 ## Development Commands
 ```bash
-npm run build:scoreboard   # Live preview scoreboard templates
-npm run build:podium       # Live preview podium templates
+npm run build              # Compile templates + PNG icons (run before deploy)
+npm run dev:scoreboard     # Live preview scoreboard templates
+npm run dev:podium         # Live preview podium templates
 ```
 
 ## Key Patterns
 - Scoreboards and podiums are HTML templates rendered with Handlebars, then converted to PNG images via Puppeteer - **no hover states, transitions, or interactive CSS** (they're static screenshots)
+- PNG icons in `templates/icons/` are converted to base64 at build time - **icons must be square** (rendered at 32x32)
 - The `sendScoreboards` function runs daily at 5 AM UTC via cron
 - Telegram bot receives messages at `/sendMessage` webhook endpoint
 - Chromium binaries are in a Lambda layer for image generation

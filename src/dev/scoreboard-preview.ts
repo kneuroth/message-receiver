@@ -1,6 +1,6 @@
 import { CHRISTMAS_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/christmas-scoreboard";
 import { DEFAULT_SCOREBOARD_TEMPLATE } from "../constants/templates/scoreboards/default-scoreboard";
-import { CHRISTMAS_SVG_SCORE_MAP, DEFAULT_SVG_SCORE_MAP } from "../constants/svg-maps";
+import { MATRIX_PNG_SCORE_MAP } from "../constants/png-maps";
 import { ScoreboardContext } from "@model/Context";
 import { promises as fs } from "fs";
 import Handlebars from "handlebars";
@@ -10,7 +10,7 @@ import { MATRIX_SCOREBOARD_AI_TEMPLATE } from "../constants/templates/scoreboard
 
 async function main() {
 
-  const SVG_MAP = CHRISTMAS_SVG_SCORE_MAP;
+  const SVG_MAP = MATRIX_PNG_SCORE_MAP;
   const TEMPLATE = MATRIX_SCOREBOARD_TEMPLATE;
 
   const scoreboardContext: ScoreboardContext = {

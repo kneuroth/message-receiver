@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "templates:compile": "ts-node scripts/build-templates.ts",
-    "templates:watch": "nodemon --watch src/constants/templates --ext hbs --exec \"npm run templates:compile\"",
-    "dev:scoreboard": "npm run templates:compile && concurrently \"npm run templates:watch\" \"npx nodemon ./src/dev/scoreboard-preview.ts\"",
-    "dev:podium": "npm run templates:compile && concurrently \"npm run templates:watch\" \"npx nodemon ./src/dev/podium-preview.ts\""
+    "build": "ts-node scripts/build-templates.ts && ts-node scripts/build-png-icons.ts",
+    "dev:scoreboard": "npm run build && concurrently \"nodemon --watch src/constants/templates --ext hbs --exec ts-node scripts/build-templates.ts\" \"nodemon --watch src/constants/templates/icons --ext png --exec ts-node scripts/build-png-icons.ts\" \"nodemon ./src/dev/scoreboard-preview.ts\"",
+    "dev:podium": "npm run build && concurrently \"nodemon --watch src/constants/templates --ext hbs --exec ts-node scripts/build-templates.ts\" \"nodemon --watch src/constants/templates/icons --ext png --exec ts-node scripts/build-png-icons.ts\" \"nodemon ./src/dev/podium-preview.ts\""
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",

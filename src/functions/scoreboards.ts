@@ -2,16 +2,14 @@ import { neon } from '@neondatabase/serverless';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { drizzle } from 'drizzle-orm/neon-http';
 
-import { eq } from 'drizzle-orm';
-import fs from 'fs/promises';
+import { MATRIX_PNG_SCORE_MAP } from '@constants/png-maps';
+import { MATRIX_SCOREBOARD_TEMPLATE } from '@constants/templates/scoreboards/matrix-scoreboard';
 import { scoreTable } from '@db/schema';
+import { convertScoresToScoreboards } from '@utils/conversions';
 import { createHTMLFile } from '@utils/file-generation';
 import { createHtmlScoreboard } from '@utils/html-generation';
-import { convertScoresToScoreboards } from '@utils/conversions';
-import { CHRISTMAS_SVG_SCORE_MAP, DEFAULT_SVG_SCORE_MAP } from '@constants/svg-maps';
-import { DEFAULT_SCOREBOARD_TEMPLATE } from '@constants/templates/scoreboards/default-scoreboard';
-import { MATRIX_SCOREBOARD_TEMPLATE } from '@constants/templates/scoreboards/matrix-scoreboard';
-
+import { eq } from 'drizzle-orm';
+import fs from 'fs/promises';
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);
 
@@ -62,7 +60,7 @@ export async function getScoreboardsHtml(req: APIGatewayProxyEvent): Promise<API
     } else {
       try {
         const scoreboards = convertScoresToScoreboards(scores);
-        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, MATRIX_SCOREBOARD_TEMPLATE, DEFAULT_SVG_SCORE_MAP), sb.chat_id)));
+        const paths = await Promise.all(scoreboards.map(sb => createHTMLFile(createHtmlScoreboard(sb, MATRIX_SCOREBOARD_TEMPLATE, MATRIX_PNG_SCORE_MAP), sb.chat_id)));
         const htmlScoreboards = await Promise.all(paths.map(pathResult => fs.readFile(pathResult.path, 'utf-8')));
         return {
           statusCode: 200,
