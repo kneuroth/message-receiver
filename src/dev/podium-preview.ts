@@ -4,11 +4,13 @@ import { promises as fs } from "fs";
 import Handlebars from "handlebars";
 import { CHRISTMAS_PODIUM_SVG_MAP, DEFAULT_PODIUM_SVG_MAP } from "../constants/svg-maps";
 import { CHRISTMAS_PODIUM_TEMPLATE } from "../constants/templates/podiums/christmas-podium";
+import { MATRIX_PODIUM_TEMPLATE } from "../constants/templates/podiums/matrix-podium";
+import { MATRIX_PNG_PODIUM_MAP } from "../constants/png-maps";
 
 async function main() {
 
-  const SVG_MAP = DEFAULT_PODIUM_SVG_MAP;
-  const TEMPLATE = DEFAULT_PODIUM_TEMPLATE;
+  const SVG_MAP = MATRIX_PNG_PODIUM_MAP;
+  const TEMPLATE = MATRIX_PODIUM_TEMPLATE;
 
   const podiumContext: PodiumContext = {
     players: [

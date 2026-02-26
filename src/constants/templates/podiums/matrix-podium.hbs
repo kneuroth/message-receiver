@@ -1,0 +1,230 @@
+
+<style>
+  :root {
+    --bg: #0d0208;
+    --green-bright: #00ff41;
+    --green-mid: #008f11;
+    --green-dark: #003b00;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Courier Prime', monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 26px;
+    color: var(--green-bright);
+    text-shadow:
+      1px 1px 4px var(--green-mid),
+      -1px -1px 4px var(--green-mid);
+    background-color: var(--bg);
+    width: 1200px;
+    padding: 10px;
+  }
+
+  .container {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid var(--green-bright);
+    box-shadow: 0 0 12px var(--green-mid), inset 0 0 12px rgba(0, 255, 65, 0.03);
+  }
+
+  /* ------------------------
+     Podium area
+     ------------------------ */
+  .podium-wrap {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .podium-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 260px;
+  }
+
+  .podium-pos {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .podium-block {
+    width: 100%;
+    padding: 18px 14px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .podium-name {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 6px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .podium-score {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  /* 1st: bright green gradient, dark text — the "chosen one" */
+  .col-1 .podium-pos {
+    text-shadow:
+      0 0 16px var(--green-bright),
+      0 0 32px var(--green-mid);
+  }
+
+  .col-1 .podium-block {
+    height: 300px;
+    background: linear-gradient(to top, var(--green-dark), var(--green-mid), var(--green-bright));
+    border: 2px solid var(--green-bright);
+    box-shadow: 0 0 24px var(--green-bright), 0 0 48px var(--green-mid);
+    color: var(--bg);
+    text-shadow: none;
+  }
+
+  /* 2nd: medium green, bright text */
+  .col-2 .podium-block {
+    height: 220px;
+    background: linear-gradient(to top, var(--bg), var(--green-dark), #005200);
+    border: 1px solid var(--green-mid);
+    box-shadow: 0 0 12px var(--green-mid);
+    color: var(--green-bright);
+    text-shadow: 1px 1px 4px var(--green-mid);
+  }
+
+  /* 3rd: dark green, muted text */
+  .col-3 .podium-block {
+    height: 180px;
+    background: linear-gradient(to top, var(--bg), var(--green-dark));
+    border: 1px solid var(--green-dark);
+    box-shadow: 0 0 8px rgba(0, 59, 0, 0.7);
+    color: var(--green-mid);
+    text-shadow: none;
+  }
+
+  /* ------------------------
+     Bottom table
+     ------------------------ */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    margin-top: 8px;
+  }
+
+  .table tr {
+    background-color: var(--bg);
+  }
+
+  .table td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--green-dark);
+    border-bottom: 1px solid var(--green-dark);
+  }
+
+  .table td:last-child {
+    border-right: 1px solid var(--green-dark);
+  }
+
+  .table td.position {
+    width: 64px;
+    font-weight: 800;
+    border-right: none;
+  }
+
+  .table td.name {
+    width: 380px;
+  }
+
+  .table td.stat {
+    flex: 1;
+  }
+
+  .table td.score {
+    width: 120px;
+    font-weight: 800;
+    text-align: right;
+  }
+</style>
+<head>
+  <link rel='preconnect' href='https://fonts.googleapis.com' />
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+  <link
+    href='https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap'
+    rel='stylesheet'
+  />
+</head>
+<body>
+  <div class='container'>
+    <div class='podium-wrap'>
+      {{#with players.[1]}}
+        <div class='podium-col col-2'>
+          <div class='podium-pos'>2</div>
+          <div class='podium-block'>
+            <div class='podium-name'>
+              {{name}}_
+            </div>
+            <div class='podium-score'>{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+
+      {{#with players.[0]}}
+        <div class='podium-col col-1'>
+          <div class='podium-pos'>1</div>
+          <div class='podium-block'>
+            <div class='podium-name'>
+              {{name}}_
+            </div>
+            <div class='podium-score'>{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+
+      {{#with players.[2]}}
+        <div class='podium-col col-3'>
+          <div class='podium-pos'>3</div>
+          <div class='podium-block'>
+            <div class='podium-name'>
+              {{name}}_
+            </div>
+            <div class='podium-score'>{{totalScore}}</div>
+          </div>
+        </div>
+      {{/with}}
+    </div>
+
+    <table class='table' role='table'>
+      <tbody>
+        {{#each players}}
+          <tr>
+            <td
+              class='position'
+              style='border-left: 3px solid {{color}};'
+            >{{position}}</td>
+            <td class='name'>{{name}}_</td>
+            <td class='stat'>{{stat}}</td>
+            <td
+              class='score'
+              style='color: {{color}}; text-shadow: 2px 2px 8px {{color}};'
+            >{{totalScore}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</body>

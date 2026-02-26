@@ -31,6 +31,12 @@ export const MATRIX_PNG_SCORE_MAP: { [key: number]: string } = {
   8: CLOWN_PNG,      // Didn't play (penalty)
 };
 
+export const MATRIX_PNG_PODIUM_MAP: { [key: number]: string } = {
+  1: BIG_SMILE_PNG,  // Winner
+  2: FIRE_PNG,       // Second place
+  3: CLAP_PNG,       // Third place
+}
+
 // Podium positions (1st, 2nd, 3rd place)
 export const DEFAULT_PNG_PODIUM_MAP: { [key: number]: string } = {
   1: BIG_SMILE_PNG,  // Winner
