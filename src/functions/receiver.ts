@@ -1,4 +1,3 @@
-
 import { scoreTable } from '@db/schema';
 import { updateSchema } from '@model/Update';
 import { neon } from '@neondatabase/serverless';

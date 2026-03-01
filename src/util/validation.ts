@@ -1,4 +1,3 @@
-
 import { Update } from '../model/Update'
 import {
   fromUnixTime,
